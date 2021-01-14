@@ -1,0 +1,10 @@
+# Example to chage backward mode
+distance_threshold: 1.0
+low_velocity_threshold: 0.2
+low_velocity_verified_duration: 3.0
+need_approve: false
+the_number_of_state: 1
+#kddi
+# start checkpoint goal
+example_position_x: [81878.7931759, 81870.8877797]
+example_position_y: [50148.3337585, 50136.0893153]
