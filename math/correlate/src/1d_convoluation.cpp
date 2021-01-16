@@ -80,6 +80,22 @@ VI Bit2Vector(const ll bit, ll n) {
 
 #define Vprint(x) for(int i=0;i<size(x);i++){print(x[i]);}
 
+double average(VD arr){
+    return SUM(arr)/SZ(arr);
+}
+
+VD standardization(VD val){
+    double variance=0;
+    double ave=average(val);
+    for (const auto v:val){
+        variance+=std::pow(v-ave,2);
+    }
+    double stddev=std::sqrt(variance/SZ(val));
+    for (auto &v:val){
+        v=(v-ave)/stddev;
+    }
+    return val;
+}
 
 /**
  *
@@ -87,7 +103,7 @@ VI Bit2Vector(const ll bit, ll n) {
  * @param out : output signal
  * @return
  */
-VD crossCorrelation(VD in, VD out) {
+VD crossCorrelation(VD in, VD out,double dt) {
     VD corr(SZ(in) + SZ(out) - 1);
     /**
    * Direct Cross Correlation Method
@@ -96,7 +112,7 @@ VD crossCorrelation(VD in, VD out) {
     for (int i = 0; i < SZ(in); ++i) {
         for (int j = 0; j < SZ(out); ++j) {
             if (i + j + 1 < SZ(in) + SZ(out) - 1)
-                corr[i + j + 1] += in[i] * out[j];
+                corr[i + j + 1] += in[i] * out[j]*dt;
         }
     }
     return corr;
@@ -122,18 +138,19 @@ void Main() {
     ll res = 0;
     string s, t, u;
     string sres = "No or NO";
-    VD in_ = {1, 4, 1, 0};
-    VD out_ = {0, 0, 2, 1};
-    VD in = {1, 4, 1, 0, 8, 9, 0, 0, 0, 0};//{1,4,1,0};
-    VD out = {0, 0, 2, 1, 5, 6, 6, 8, 9, 0, 0, 0};//{0,0,2,1,};
+    VD in = {1, 4, 1, 0,1};
+    VD out = {0, 0, 2, 1,1};
+    //VD in = {1, 4, 1, 0, 8, 9, 0, 0, 0, 0};//{1,4,1,0};
+    //VD out = {0, 0, 2, 1, 5, 6, 6, 8, 9, 0, 0, 0};//{0,0,2,1,};
     for (int j = 0; j < 1; j++) {
-        VD corr = crossCorrelation(in, out);
+        VD
+        VD corr = crossCorrelation(in, out,0.1);
         Vprint(corr);
         int peak = peakDetector(corr);
         int estimate_delay = peak + 1 - SZ(in);
-        print(estimate_delay);
-        in.emplace_back(in_[j % 4]);
-        out.emplace_back(out_[j % 4]);
+        //print(estimate_delay);
+        //in.emplace_back(in_[j % 4]);
+        //out.emplace_back(out_[j % 4]);
         in.erase(in.begin());
         out.erase(out.begin());
     }

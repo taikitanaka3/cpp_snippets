@@ -3,7 +3,7 @@ using namespace std;
 using ll=long long int;
 using ld=long double;
 using VI=vector<ll>;
-using VD=vector<ld>;
+using VD=vector<double>;
 using VVI=vector<VI>;
 using VC=vector<char>;
 using VB=vector<bool>;
@@ -39,28 +39,44 @@ ll lcm(ll x, ll y) { return x / gcd(x, y) * y; }
 ll GCD(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = gcd(a, v[i]);} return a;}
 ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} return a;}
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
+#define Vprint(x) for(int i=0;i<size(x);i++){print(x[i]);}
 
+double average(VD arr){
+    if(arr.size()==0) return 0;
+    return accumulate((arr).begin(),(arr).end(), 0)/arr.size();
+}
+
+VD normalization(VD arr){
+    double min=*std::min_element(arr.begin(),arr.end());
+    double max=*std::max_element(arr.begin(),arr.end());
+    for(auto &v:arr){
+        v=min+(v-min)*(1-min)/(max-min);
+    }
+    return arr;
+}
+
+VD standardization(VD val){
+    double variance=0;
+    double ave=average(val);
+    for (const auto v:val){
+        variance+=std::pow(v-ave,2);
+    }
+    double stddev=std::sqrt(variance/SZ(val));
+    for (auto &v:val){
+        v=(v-ave)/stddev;
+    }
+    return val;
+}
 
 void Main()
 {
-	ll n,m,l; ll res=0;
-	string s,t,u; string sres="No or NO";
 
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
-
-	ll h=100,w=100;
-	
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
-	}
-
-	cout << res << "\n";
+	vector<double> a(5,3);
+	a[3]=10;
+	double ave=average(a);
+    print(ave);
+    VD stddev=standardization(a);
+    Vprint(stddev);
 	return;
 }
 
