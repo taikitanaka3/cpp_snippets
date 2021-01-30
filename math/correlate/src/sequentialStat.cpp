@@ -80,6 +80,13 @@ void applyAveragingToVector(T & arr)
     return;
 }
 
+static double sequentialAverage(int & cnt, double & avg, const double val)
+{
+    avg = (cnt * avg + val) / (cnt + 1);
+    cnt++;
+    return avg;
+}
+
 static double sequentialStddev(int & cnt, double & avg,double &variance, const double val)
 {
     double old_avg=avg;
@@ -89,13 +96,15 @@ static double sequentialStddev(int & cnt, double & avg,double &variance, const d
     return std::sqrt(variance);
 }
 
-static double sequentialCovariance(int & cnt, double & x_avg, double & y_avg,double &cov, const double x_val,const double y_val)
+static double sequentialCovariance(int & cnt, double & avg_x, double & avg_y,double &cov, const double val_x,const double val_y)
 {
-    x_avg = (cnt * x_avg + x_val) / (cnt + 1);
-    y_avg = (cnt * y_avg + y_val) / (cnt + 1);
-    cov=(cnt * std::pow(cov,2)+ (x_val-x_avg)*(y_val-y_avg)) / (double)(cnt + 1);
+    if(cnt==0) {
+        cnt++;
+        return 0;
+    }
+    cov=(cnt * cov + (val_x-avg_x)*(val_y-avg_y)*((cnt+1.0)/(double)cnt)) / (double)(cnt + 1.0);
     cnt++;
-    return std::sqrt(cov);
+    return cov;
 }
 
 template <class T>
@@ -131,17 +140,12 @@ double getCovarianceFromVector(const T & x, const T & y)
     if (sz == 0) {
         return 0;
     }
-    double x_avg = getAverageFromVector(x);
-    double y_avg = getAverageFromVector(y);
-    double x_stddev = getStddevFromVector(x);
-    double y_stddev = getStddevFromVector(y);
-    if (x_stddev < 0.0001 || y_stddev < 0.0001) {
-        return 0;
-    }
+    double avg_x = getAverageFromVector(x);
+    double avg_y = getAverageFromVector(y);
     for (int i = 0; i < x.size(); i++) {
-        cov += (x[i] - x_avg) * (y[i] - y_avg);
+        cov += (x[i] - avg_x) * (y[i] - avg_y);
     }
-    return cov;
+    return cov/sz;
 }
 
 
@@ -151,19 +155,25 @@ double getCorrelationCoefficientFromVector(const T & x,const T & y)
     int sz=x.size();
     double coeff=0;
     if (sz == 0) return 0;
-    double x_avg = getAverageFromVector(x);
-    double y_avg = getAverageFromVector(y);
+    double avg_x = getAverageFromVector(x);
+    double avg_y = getAverageFromVector(y);
     double x_stddev=getStddevFromVector(x);
     double y_stddev=getStddevFromVector(y);
     for(int i=0;i<x.size();i++){
-        coeff+=(x[i]-x_avg)*(y[i]-y_avg)/sz;
+        coeff+=(x[i]-avg_x)*(y[i]-avg_y);
     }
-    coeff/=(x_stddev*y_stddev);
+    coeff/=(x_stddev*y_stddev*sz);
     return coeff;
 }
 void Main()
 {
     int cnt=0;
+    int cnt_stddev=0;
+    int cnt_avg_x=0;
+    int cnt_avg_y=0;
+    int cnt_y=0;
+    int cnt_x=0;
+    int cnt_cov=0;
     double avg=0;
     double val;
 
@@ -171,27 +181,104 @@ void Main()
     vector<double> x;
     vector<double> y;
 
-    double x_avg;
-    double y_avg;
+    double avg_x;
+    double avg_y;
     double xy_cov;
 
 
     for (int i = 0; i < 4; ++i) {
         x.emplace_back(i);
         y.emplace_back(i*2);
-        double x_val=i;
-        double y_val=i*2;
-        double seq_stddev=sequentialStddev(cnt,avg,var,x_val);
+        double val_x=i;
+        double val_y=i*2;
+        double seq_stddev=sequentialStddev(cnt_stddev,avg,var,val_x);
         double normal_stddev=getStddevFromVector(x);
-        print("avg: "<<avg<<" var: "<<var<<" stddev: "<<seq_stddev<<" normal: "<<normal_stddev) ;
+        double avg_x=sequentialAverage(cnt_avg_x,avg_x,val_x);
+        double avg_y=sequentialAverage(cnt_avg_y,avg_y,val_y);
+        double seq_cov=sequentialCovariance(cnt_cov,avg_x,avg_y,xy_cov,val_x,val_y);
+        double normal_cov=getCovarianceFromVector(x,y);
+        print("avg: "<<avg<<" var: "<<var<<" stddev: "<<seq_stddev<<" normal: "<<normal_stddev<<" cov: "<<seq_cov<<" normal_cov: "<<normal_cov) ;
     }
     return;
 }
+
+double calcSequantialCrrelation(){
+    int cnt_stddev=0;
+    int cnt_avg_x=0;
+    int cnt_avg_y=0;
+    int cnt_stddev_x=0;
+    int cnt_stddev_y=0;
+    int cnt_y=0;
+    int cnt_x=0;
+    int cnt_cov=0;
+    vector<double> x;
+    vector<double> y;
+    double avg_x;
+    double avg_y;
+    double var_x=0;
+    double var_y=0;
+    double xy_cov;
+
+    for (int i = 0; i < 4; ++i) {
+        x.emplace_back(i);
+        y.emplace_back(i*2);
+        double val_x=i;
+        double val_y=i*2;
+        double avg_x=sequentialAverage(cnt_avg_x,avg_x,val_x);
+        double avg_y=sequentialAverage(cnt_avg_y,avg_y,val_y);
+        double stddev_x=sequentialStddev(cnt_stddev_x,avg_x,var_x,val_x);
+        double stddev_y=sequentialStddev(cnt_stddev_y,avg_y,var_y,val_y);
+        double seq_cov=sequentialCovariance(cnt_cov,avg_x,avg_y,xy_cov,val_x,val_y);
+        double seq_corr=seq_cov/(stddev_x*stddev_y);
+        double normal_cov=getCovarianceFromVector(x,y);
+        print(" cov: "<<seq_cov<<" normal_cov: "<<normal_cov<<"seq corr"<<seq_corr) ;
+    }
+
+}
+
+
+void Main2()
+{
+    int cnt=0;
+    int cnt_stddev=0;
+    int cnt_avg_x=0;
+    int cnt_avg_y=0;
+    int cnt_y=0;
+    int cnt_x=0;
+    int cnt_cov=0;
+    double avg=0;
+    double val;
+
+    double var=0;
+    vector<double> x;
+    vector<double> y;
+
+    double avg_x;
+    double avg_y;
+    double xy_cov;
+
+
+    for (int i = 0; i < 4; ++i) {
+        x.emplace_back(i);
+        y.emplace_back(i*2);
+        double val_x=i;
+        double val_y=i*2;
+        double seq_stddev=sequentialStddev(cnt_stddev,avg,var,val_x);
+        double normal_stddev=getStddevFromVector(x);
+        double avg_x=sequentialAverage(cnt_avg_x,avg_x,val_x);
+        double avg_y=sequentialAverage(cnt_avg_y,avg_y,val_y);
+        double seq_cov=sequentialCovariance(cnt_cov,avg_x,avg_y,xy_cov,val_x,val_y);
+        double normal_cov=getCovarianceFromVector(x,y);
+        print("avg: "<<avg<<" var: "<<var<<" stddev: "<<seq_stddev<<" normal: "<<normal_stddev<<" cov: "<<seq_cov<<" normal_cov: "<<normal_cov) ;
+    }
+    return;
+}
+
 
 int main()
 {
     std::cin.tie(0);
     std::ios_base::sync_with_stdio(false);
     std::cout << std::fixed << std::setprecision(15);
-    Main();
+    calcSequantialCrrelation();
 }
