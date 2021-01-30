@@ -41,26 +41,41 @@ ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} retur
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
 
 
+
+
+template <class T>
+T getInterpolatedVector(const T & arr, int num_interp)
+{
+    T idx_arr(arr.size());
+    T idx_interp(arr.size() * num_interp, 0.0);
+    T interpolated(arr.size() * num_interp, 0.0);
+    for (int i = 0; i < arr.size(); i++) {
+        idx_arr[i] = i * num_interp;
+        for (int j = 0; j < num_interp; j++) {
+            int idx = i * num_interp + j;
+            idx_interp[idx] = idx;
+        }
+    }
+    return interpolated;
+}
+
+
 void Main()
 {
 	ll n,m,l; ll res=0;
 	string s,t,u; string sres="No or NO";
 
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
 
-	ll h=100,w=100;
-	
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
-	}
+	deque<int> ff={1,2};
+	auto f=ff;
+    auto &g=ff;
 
-	cout << res << "\n";
+	f[1]=4;
+	g[1]=5;
+
+    getInterpolatedVector(ff,4);
+
+
 	return;
 }
 

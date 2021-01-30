@@ -80,6 +80,24 @@ void applyAveragingToVector(T & arr)
     return;
 }
 
+static double sequentialStddev(int & cnt, double & avg,double &variance, const double val)
+{
+    double old_avg=avg;
+    avg = (cnt * avg + val) / (cnt + 1);
+    variance=(cnt * (variance+ std::pow(old_avg, 2)) + std::pow(val, 2)) / (double)(cnt + 1) -std::pow(avg, 2);
+    cnt++;
+    return std::sqrt(variance);
+}
+
+static double sequentialCovariance(int & cnt, double & x_avg, double & y_avg,double &cov, const double x_val,const double y_val)
+{
+    x_avg = (cnt * x_avg + x_val) / (cnt + 1);
+    y_avg = (cnt * y_avg + y_val) / (cnt + 1);
+    cov=(cnt * std::pow(cov,2)+ (x_val-x_avg)*(y_val-y_avg)) / (double)(cnt + 1);
+    cnt++;
+    return std::sqrt(cov);
+}
+
 template <class T>
 int getMaximumIndex(const T x){
     const auto iter = std::max_element(x.begin(), x.end());
@@ -90,7 +108,7 @@ template <class T>
 double getAverageFromVector(const T & arr)
 {
     if (arr.size() == 0) return 0;
-    return std::accumulate((arr).begin(), (arr).end(), 0.0) / (double)arr.size();
+    return std::accumulate((arr).begin(), (arr).end(), (double)0.0) / (double)arr.size();
 }
 
 template <class T>
@@ -98,12 +116,34 @@ double getStddevFromVector(const T & arr)
 {
     if (arr.size() == 0) return 0;
     double average = getAverageFromVector(arr);
-    double stddev = 0;
+    double diff=0;
     for (const auto & v : arr) {
-        stddev += std::sqrt(std::pow(v - average, 2) / (double)arr.size());
+        diff += std::pow(v - average, 2);
     }
-    return stddev;
+    return std::sqrt(diff/(double)arr.size());
 }
+
+template <class T>
+double getCovarianceFromVector(const T & x, const T & y)
+{
+    int sz = x.size();
+    double cov = 0;
+    if (sz == 0) {
+        return 0;
+    }
+    double x_avg = getAverageFromVector(x);
+    double y_avg = getAverageFromVector(y);
+    double x_stddev = getStddevFromVector(x);
+    double y_stddev = getStddevFromVector(y);
+    if (x_stddev < 0.0001 || y_stddev < 0.0001) {
+        return 0;
+    }
+    for (int i = 0; i < x.size(); i++) {
+        cov += (x[i] - x_avg) * (y[i] - y_avg);
+    }
+    return cov;
+}
+
 
 template <class T>
 double getCorrelationCoefficientFromVector(const T & x,const T & y)
@@ -123,35 +163,35 @@ double getCorrelationCoefficientFromVector(const T & x,const T & y)
 }
 void Main()
 {
+    int cnt=0;
+    double avg=0;
+    double val;
 
-	vector<double> a(5,3);
-	a[3]=10;
-	double ave=average(a);
-    //print(ave);
-    //VD stddev=standardization(a);
-    //Vprint(stddev);
+    double var=0;
+    vector<double> x;
+    vector<double> y;
 
-    std::vector<double> x,y;
-    for(int i=0;i<10;i++){
-        x.push_back(i);
-        y.push_back(i*i*i);
+    double x_avg;
+    double y_avg;
+    double xy_cov;
+
+
+    for (int i = 0; i < 4; ++i) {
+        x.emplace_back(i);
+        y.emplace_back(i*2);
+        double x_val=i;
+        double y_val=i*2;
+        double seq_stddev=sequentialStddev(cnt,avg,var,x_val);
+        double normal_stddev=getStddevFromVector(x);
+        print("avg: "<<avg<<" var: "<<var<<" stddev: "<<seq_stddev<<" normal: "<<normal_stddev) ;
     }
-    y[5]=-2000;
-    double coeff=getCorrelationCoefficientFromVector(x,y);
-    print(coeff);
-    //applyAveragingToVector(x);
-    //int index=getMaximumIndex(x);
-    //print(index);
-    //std::vector<double>::iterator iter = std::max_element(x.begin(), x.end());
-    //size_t index = std::distance(x.begin(), iter);
-    //std::cout << "max element:" << x[index] << std::endl;
-	return;
+    return;
 }
 
 int main()
 {
-	std::cin.tie(0);
-	std::ios_base::sync_with_stdio(false);
-	std::cout << std::fixed << std::setprecision(15);
-	Main();
+    std::cin.tie(0);
+    std::ios_base::sync_with_stdio(false);
+    std::cout << std::fixed << std::setprecision(15);
+    Main();
 }

@@ -41,33 +41,28 @@ ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} retur
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
 
 
-void Main()
-{
-	ll n,m,l; ll res=0;
-	string s,t,u; string sres="No or NO";
+class Accesser {
+public:
+    void private_accesser1();
+    void private_accesser2();
+};
 
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
+class PrivateHolder {
+public:
+    PrivateHolder(int val) : private_value(val) {}
+    friend class Accesser;
+private:
+    int private_value;
+};
 
-	ll h=100,w=100;
-	
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
-	}
-
-	cout << res << "\n";
-	return;
+void Accesser::private_accesser1() {
+    PrivateHolder ph(10);
+    // OK.
+    std::cout << ph.private_value << std::endl;
 }
 
-int main()
-{
-	std::cin.tie(0);
-	std::ios_base::sync_with_stdio(false);
-	std::cout << std::fixed << std::setprecision(15);
-	Main();
+void Accesser::private_accesser2() {
+    PrivateHolder ph(10);
+    // OK.
+    std::cout << ph.private_value + 1 << std::endl;
 }

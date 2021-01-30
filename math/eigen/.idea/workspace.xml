@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
-    <generated>
-      <config projectName="Project" targetName="src_a" />
-      <config projectName="Project" targetName="src_c" />
-      <config projectName="Project" targetName="src_b" />
-      <config projectName="Project" targetName="src_e" />
-      <config projectName="Project" targetName="src_d" />
-      <config projectName="Project" targetName="src_f" />
-    </generated>
+    <generated />
   </component>
   <component name="CMakeSettings">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f38beb6d-6b75-4771-ae93-dd25038df4c2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/test/src/integrate.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/src/f.cpp" beforeDir="false" />
-    </list>
+    <list default="true" id="f38beb6d-6b75-4771-ae93-dd25038df4c2" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,7 +18,6 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -38,119 +25,41 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/CMakeLists.txt" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../math/correlate" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
-  <component name="RunManager" selected="CMake Application.src_f">
-    <configuration name="src_a" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="src_a" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="src_a">
+  <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="src_b" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="src_b" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="src_b">
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="src_c" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="src_c" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="src_c">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="src_d" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="src_d" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="src_d">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="src_e" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="src_e" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="src_e">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="src_f" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Project" TARGET_NAME="src_f" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Project" RUN_TARGET_NAME="src_f">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
-    <list>
-      <item itemvalue="CMake Application.src_a" />
-      <item itemvalue="CMake Application.src_b" />
-      <item itemvalue="CMake Application.src_c" />
-      <item itemvalue="CMake Application.src_d" />
-      <item itemvalue="CMake Application.src_e" />
-      <item itemvalue="CMake Application.src_f" />
-    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f38beb6d-6b75-4771-ae93-dd25038df4c2" name="Default Changelist" comment="" />
+      <created>1610599221755</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1610599221755</updated>
+      <workItem from="1610599224711" duration="207000" />
+    </task>
+    <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state width="427" height="506" key="DebuggerActiveHint" timestamp="1609318408020">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="427" height="506" key="DebuggerActiveHint/67.27.1853.1053@67.27.1853.1053" timestamp="1609318408020" />
-    <state x="1234" y="311" width="424" height="484" key="FileChooserDialogImpl" timestamp="1609295263773">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state x="1234" y="311" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609295263773" />
-    <state width="1807" height="278" key="GridCell.Tab.0.bottom" timestamp="1609667696522">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="278" key="GridCell.Tab.0.bottom/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631706" />
-    <state width="1807" height="278" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1609667696522" />
-    <state width="1807" height="278" key="GridCell.Tab.0.center" timestamp="1609667696521">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="278" key="GridCell.Tab.0.center/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631705" />
-    <state width="1807" height="278" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1609667696521" />
-    <state width="1807" height="278" key="GridCell.Tab.0.left" timestamp="1609667696521">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="278" key="GridCell.Tab.0.left/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631705" />
-    <state width="1807" height="278" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1609667696521" />
-    <state width="1807" height="278" key="GridCell.Tab.0.right" timestamp="1609667696522">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="278" key="GridCell.Tab.0.right/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631706" />
-    <state width="1807" height="278" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1609667696522" />
-    <state width="1807" height="343" key="GridCell.Tab.1.bottom" timestamp="1609664367918">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="343" key="GridCell.Tab.1.bottom/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631698" />
-    <state width="1807" height="343" key="GridCell.Tab.1.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1609664367918" />
-    <state width="1807" height="343" key="GridCell.Tab.1.center" timestamp="1609664367918">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="343" key="GridCell.Tab.1.center/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631698" />
-    <state width="1807" height="343" key="GridCell.Tab.1.center/67.27.1853.1053@67.27.1853.1053" timestamp="1609664367918" />
-    <state width="1807" height="343" key="GridCell.Tab.1.left" timestamp="1609664367918">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="343" key="GridCell.Tab.1.left/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631698" />
-    <state width="1807" height="343" key="GridCell.Tab.1.left/67.27.1853.1053@67.27.1853.1053" timestamp="1609664367918" />
-    <state width="1807" height="343" key="GridCell.Tab.1.right" timestamp="1609664367918">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state width="871" height="343" key="GridCell.Tab.1.right/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609309631698" />
-    <state width="1807" height="343" key="GridCell.Tab.1.right/67.27.1853.1053@67.27.1853.1053" timestamp="1609664367918" />
-    <state x="898" y="188" key="SettingsEditor" timestamp="1609296517376">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state x="898" y="188" key="SettingsEditor/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609296517376" />
-    <state x="1101" y="381" key="com.intellij.ide.util.TipDialog" timestamp="1609662142235">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state x="1101" y="381" key="com.intellij.ide.util.TipDialog/67.27.1853.1053@67.27.1853.1053" timestamp="1609662142235" />
-    <state x="1093" y="127" width="717" height="853" key="dock-window-1" timestamp="1609297695359">
-      <screen x="67" y="27" width="1853" height="1053" />
-    </state>
-    <state x="1093" y="127" width="717" height="853" key="dock-window-1/67.27.1853.1053/67.27.1853.1053@67.27.1853.1053" timestamp="1609297695359" />
+    <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -164,26 +73,6 @@
           <url>file://$PROJECT_DIR$/test/src/kalman_filter.cpp</url>
           <line>94</line>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/test/src/integrate.cpp</url>
-          <line>137</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/test/src/integrate.cpp</url>
-          <line>138</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/test/src/integrate.cpp</url>
-          <line>45</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/test/src/integrate.cpp</url>
-          <line>46</line>
-          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

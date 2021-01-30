@@ -39,6 +39,32 @@ ll lcm(ll x, ll y) { return x / gcd(x, y) * y; }
 ll GCD(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = gcd(a, v[i]);} return a;}
 ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} return a;}
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
+#define Vprint(x) for(int i=0;i<size(x);i++){print(x[i]);}
+
+double lowpassFilter(double curr,double prev,double cutoff,double delta_time){
+    double tau=1/(2*M_PI*cutoff);
+    double a=tau/(delta_time+tau);
+    double b=delta_time/(delta_time+tau);
+    print("cutoff: "<<cutoff<<" tau/(T+tau): "<<a<<" T/(T+tau): "<<b);
+    return prev*a+(1-a)*curr;
+}
+
+/**
+ * @param : arr vector like contener
+ * @return : norm normalized arr vector
+ */
+template <class T>
+T getNormalizedVector(const T & arr)
+{
+    T norm = arr;
+    double min = *std::min_element(arr.begin(), arr.end());
+    double max = *std::max_element(arr.begin(), arr.end());
+    for (auto & v : norm) {
+        // normalize range -1 ~ 1
+        v = (2*v-(max +  min)) / (max - min);
+    }
+    return norm;
+}
 
 
 void Main()
@@ -46,21 +72,19 @@ void Main()
 	ll n,m,l; ll res=0;
 	string s,t,u; string sres="No or NO";
 
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
 
-	ll h=100,w=100;
-	
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
+	VD a(10);
+	for(int i=0;i<10;i++){
+	    a[i]=(double)i*i;
+	}
+	double val=lowpassFilter(3,4,7,0.033);
+	for(int i=3;i<30;i++){
+	    lowpassFilter(1,2,i,0.033);
 	}
 
-	cout << res << "\n";
+    //auto b=getNormalizedVector(a);
+	//Vprint(b);
+
 	return;
 }
 
@@ -68,6 +92,6 @@ int main()
 {
 	std::cin.tie(0);
 	std::ios_base::sync_with_stdio(false);
-	std::cout << std::fixed << std::setprecision(15);
+	std::cout << std::fixed << std::setprecision(4);
 	Main();
 }
