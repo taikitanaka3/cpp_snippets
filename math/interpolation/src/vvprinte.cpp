@@ -40,27 +40,30 @@ ll GCD(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = gcd(a, v[i]);} retur
 ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} return a;}
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
 
+#define PRINT(x) std::cout<<x<<std::endl;
+#define VPRINT(x)                                                              \
+  for (int i = 0; i < x.size(); i++) {                                          \
+    PRINT(x[i]);                                                               \
+  }
+#define LPRINT(x)                                                              \
+  for (int i = 0; i < x.size(); i++) {                                         \
+    std::cout<<x[i]<<" ";                                                           \
+  }                                                                            \
+  std::cout<<std::endl \
+
+#define V2PRINT(x)                                                             \
+std::cout << std::fixed << std::setprecision(3);                                                                               \
+  for (int j = 0; j < x.size(); j++) {                                          \
+    LPRINT(x[j]);                                                         \
+  }
+
 
 void Main()
 {
-	ll n,m,l; ll res=0;
-	string s,t,u; string sres="No or NO";
-
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
-
-	ll h=100,w=100;
-	
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
-	}
-
-	cout << res << "\n";
+    std::vector<double> a={1,2,3};
+    std::vector<std::vector<double>> b={a,a,a};
+    VPRINT(a);
+    V2PRINT(b);
 	return;
 }
 
@@ -68,6 +71,5 @@ int main()
 {
 	std::cin.tie(0);
 	std::ios_base::sync_with_stdio(false);
-	std::cout << std::fixed << std::setprecision(15);
 	Main();
 }

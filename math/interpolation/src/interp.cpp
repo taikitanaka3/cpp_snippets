@@ -16,79 +16,10 @@
 
 #include "interpolate.h"
 
-#include "csv_loader.h"
+/*
+ * linear interpolation
+ */
 
-CSVLoader::CSVLoader(std::string csv_path) { csv_path_ = csv_path; }
-
-CSVLoader::~CSVLoader() {}
-
-bool CSVLoader::readCSV(std::vector<std::vector<std::string>> & result, const char delim)
-{
-    std::ifstream ifs(csv_path_);
-    if (!ifs.is_open()) {
-        return false;
-    }
-
-    std::string buf;
-    while (std::getline(ifs, buf)) {
-        std::vector<std::string> tokens;
-
-        std::istringstream iss(buf);
-        std::string token;
-        while (std::getline(iss, token, delim)) {
-            tokens.push_back(token);
-        }
-
-        if (tokens.size() != 0) {
-            result.push_back(tokens);
-        }
-    }
-
-    return true;
-}
-
-bool readEPSMapFromCSV(const std::string & csv_path,
-                       std::string & vehicle_name, std::vector<double> & vel_index,
-                       std::vector<double> & voltage_index, std::vector<std::vector<double>> & eps_map)
-{
-    CSVLoader csv(csv_path);
-    std::vector<std::vector<std::string>> table;
-
-    if (!csv.readCSV(table))
-    {
-        return false;
-    }
-
-    if (table[0].size() < 2)
-    {
-        return false;
-    }
-
-    vehicle_name = table[0][0];
-    for (unsigned int i = 1; i < table[0].size(); ++i)
-    {
-        vel_index.push_back(std::stod(table[0][i]));
-    }
-
-    for (unsigned int i = 1; i < table.size(); ++i)
-    {
-        if (table[0].size() != table[i].size())
-        {
-            return false;
-        }
-        voltage_index.push_back(std::stod(table[i][0]));
-        std::vector<double> steer_angle_vels;
-        for (unsigned int j = 1; j < table[i].size(); ++j)
-        {
-            steer_angle_vels.push_back(std::stod(table[i][j]));
-            std::cout<<std::stod(table[i][j]);
-        }
-        std::cout<<std::endl;
-        eps_map.push_back(steer_angle_vels);
-    }
-
-    return true;
-}
 bool LinearInterpolate::interpolate(
         const std::vector<double> &base_index, const std::vector<double> &base_value,
         const double &return_index, double &return_value) {
@@ -97,7 +28,7 @@ bool LinearInterpolate::interpolate(
             double x1=x[i+1];
             double x0=x[i];
             if (x[i+1] < x[i]) {
-                std::cout<<"decrease: "<<i<<std::endl;
+                std::cout<<"decrease"<<std::endl;
                 return false;
             }
         }
@@ -169,51 +100,33 @@ bool LinearInterpolate::interpolate(
     return true;
 }
 
-#include <bits/stdc++.h>
+
 int main() {
-    std::cout << std::fixed << std::setprecision(5);
-    std::string map_path="/home/ros1-melodic/workspace/cpp_snippets/math/interpolation/config/map2.csv";
-    std::vector<double> steer_angle_vels_interp;
-    std::vector<double> vel_index_;
-    std::vector<double> voltage_index_;
-    std::vector<std::vector<double>> eps_map_;
-    std::string name="aaa";
-    readEPSMapFromCSV(map_path,name,vel_index_,voltage_index_,eps_map_);
     //const double target = -1.4;
     //const double current = -1.5;
+    const double target = 1.4;
+    const double current = 1.5;
     double voltage=0;
-    double target = -0.5;
-    double current = -0.9;
-    for(int i=-4;i<4;i++) {
-        for (int j = -4; j < 4; j++) {
-            double target = i*0.1;
-            double current = j*0.1;
-            LinearInterpolate linear_interp;
-            steer_angle_vels_interp.clear();
-            if (current < vel_index_.front())
-            {
-                current = vel_index_.front();
-            }
-            else if (vel_index_.back() < current)
-            {
-                current = vel_index_.back();
-            }
-            for (std::vector<double> steer_angle_vels : eps_map_) {
-                double steer_angle_vel_interp;
-                linear_interp.interpolate(vel_index_, steer_angle_vels, current, steer_angle_vel_interp);
-                steer_angle_vels_interp.push_back(steer_angle_vel_interp);
-            }
-            if (target < steer_angle_vels_interp.front())
-            {
-                target = steer_angle_vels_interp.front();
-            }
-            else if (steer_angle_vels_interp.back() < target)
-            {
-                target = steer_angle_vels_interp.back();
-            }
-            linear_interp.interpolate(steer_angle_vels_interp, voltage_index_, target, voltage);
-            std::cout<<"(target_vel,current_vel)\t"<<"("<<target<<","<<current<<")"<<"\t\t"<<"voltage: "<<voltage<<std::endl;
-        }
+    LinearInterpolate linear_interp;
+    std::vector<double> steer_angle_vels_interp;
+    std::vector<double> vel_index_ = {-2, -1, 0, 1, 2};
+    std::vector<double> voltage_index_ = {-4, -2, 0, 2, 4};
+    std::vector<std::vector<double>> eps_map_ =
+            {{-1.5, -2.0, -2.5, -2.0, -1.5},
+             {-1,   -1.5, -2.0, -1.5, -1},
+             {0,    0,    0,    0,    0},
+             {1,    1.5,  2,    1.5,  1},
+             {1.5,  2,    2.5,  2,    1.5}
+            };
+
+    for (std::vector<double> steer_angle_vels : eps_map_) {
+        double steer_angle_vel_interp;
+        linear_interp.interpolate(vel_index_, steer_angle_vels, current, steer_angle_vel_interp);
+        steer_angle_vels_interp.push_back(steer_angle_vel_interp);
+        std::cout<<steer_angle_vel_interp<<std::endl;
+        //return 1;
     }
-        return 0;
+    linear_interp.interpolate(steer_angle_vels_interp, voltage_index_, target, voltage);
+    std::cout<<"voltage: "<<voltage<<std::endl;
+    return 0;
 }
