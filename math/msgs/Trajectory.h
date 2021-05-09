@@ -35,7 +35,7 @@ namespace geometry_msgs{
 	};
 
 	struct Pose{
-		Point point;
+		Point position;
 		Orientation orientation;
 	};
 	struct Twist{

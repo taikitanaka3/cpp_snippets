@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <Trajectory.h>
 using namespace std;
 using ll=long long int;
 using ld=long double;
@@ -40,27 +41,48 @@ ll GCD(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = gcd(a, v[i]);} retur
 ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} return a;}
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
 
+// curr_traj_vel[m/s]
+double calcSafeVelocity(double curr_traj_vel){
+	struct Scene {
+		const double kmh2ms=1.0/3.6;
+		const double ms2kmh=1.0/3.6;
+		double national_highway = 60.0*kmh2ms;
+		double public_road = 40.0*kmh2ms;
+		double private_road = 30.0*kmh2ms;
+		double pedestrian_road = 25.0*kmh2ms;
+	};
+	Scene scene;
+	double safe_vel=curr_traj_vel;
+	// ignore high speed way
+	if(curr_traj_vel>scene.national_highway) {
+		return curr_traj_vel;
+	}
+	else if(curr_traj_vel>scene.public_road) {
+		safe_vel=35.0*scene.ms2kmh;
+	}
+	else if(curr_traj_vel>scene.private_road) {
+		safe_vel=30.0*scene.ms2kmh;
+	}
+	else if(curr_traj_vel>scene.pedestrian_road) {
+		safe_vel=20.0*scene.ms2kmh;
+	}
+	else{
+		safe_vel=5.0*scene.ms2kmh;
+	}
+	return safe_vel;
+}
 
 void Main()
 {
-	ll n,m,l; ll res=0;
-	string s,t,u; string sres="No or NO";
-
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
-
-	ll h=100,w=100;
-	
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
+	autoware_planning_msgs::Trajectory safe_trajectory;
+	for (int i = 0; i < 70; i++) {
+		double v=i*1.0/3.6;
+		autoware_planning_msgs::TrajectoryPoint point;
+		auto &traj_v=point.twist.linear.x;
+		traj_v=calcSafeVelocity(v);
+		safe_trajectory.points.emplace_back(point);
+		print("v: "<<v*3.6<<"\t"<<"safev: "<<traj_v*3.6);
 	}
-
-	cout << res << "\n";
 	return;
 }
 
