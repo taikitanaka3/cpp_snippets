@@ -43,31 +43,57 @@ VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_ba
 
 void Main()
 {
-	ll n,m,l; ll res=0;
-	string s,t,u; string sres="No or NO";
+    ll n,m,l; ll res=0;
+    string s,t,u; string sres="No or NO";
 
-	cin>>n;
-	VI a(n),b(n);
-	rep(i, n) cin >> a[i];
+    bool a=false;
+    bool b=false;
+    if(a==true and b==true){
+        print("and");
+    }else if(a==true or b==true){
+        print("or");
+    }else if(not a or b){
+        print("not");
+    }
+    /**
+     *
+     *       if (
+        maximize and distance_along_lanelet > blindspot.distance_along_lanelet or
+        not maximize and distance_along_lanelet < blindspot.distance_along_lanelet)
+     */
 
-	ll h=100,w=100;
+    bool maximize=false;
+    bool distlllarger=true;
+    if(maximize and distlllarger or not maximize and not distlllarger){
+        print("OK");
+    }
+    maximize=false;
+    distlllarger=false;
+    if(maximize and distlllarger or not maximize and not distlllarger){
+        print("OK");
+    }
 
-	VVI	mp(h,VI(w,0));
-	VVC	grid(h,VC(w,'.'));
-	rep(j, h){
-		rep(i,w){
-			grid[j][i]='#';
-		}
-	}
+    int aaa=101;
+    int bbb=101;
+    int ccc=100;
+    if(aaa==100 and bbb==100 or aaa==101 and ccc==100){
+        print("pass");
+    }
 
-	cout << res << "\n";
-	return;
+    if(aaa==100 and bbb==100 or aaa==101 and ccc==100){
+        print("pass");
+    }
+
+
+
+    cout << res << "\n";
+    return;
 }
 
 int main()
 {
-	std::cin.tie(0);
-	std::ios_base::sync_with_stdio(false);
-	std::cout << std::fixed << std::setprecision(15);
-	Main();
+    std::cin.tie(0);
+    std::ios_base::sync_with_stdio(false);
+    std::cout << std::fixed << std::setprecision(15);
+    Main();
 }

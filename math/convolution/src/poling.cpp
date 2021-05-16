@@ -125,8 +125,8 @@ void Vprint(T vec,int w) {
     std::cout<<std::endl;
 }
 template<class T>
-void averagePooling(T occ_grid) {
-
+T averagePooling(T occ_grid) {
+    Vprint(occ_grid.data,occ_grid.info.width);
     navigation_msgs::OccupancyGrid new_occ_grid;
     auto &old_g = occ_grid.data;
     auto &new_g = new_occ_grid.data;
@@ -139,16 +139,41 @@ void averagePooling(T occ_grid) {
 
     for (int i = 0; i < new_w; ++i) {
         for (int j = 0; j < new_h; ++j) {
+            // top left corner
             int old_idx=i * 2+j * 2;
-            new_g[i*new_w+j] = old_g[old_idx]
+            new_g[i*new_w+j] = (old_g[old_idx]
                           + old_g[old_idx+1]
-                          + old_g[old_idx+new_w]
-                          + old_g[old_idx+new_w+1];
+                          + old_g[old_idx+occ_grid.info.width]
+                          + old_g[old_idx+occ_grid.info.width+1])*0.25;
         }
     }
-
     Vprint(new_g,new_w);
+    return new_occ_grid;
+}
 
+template<class T>
+T maxPooling(T occ_grid) {
+    Vprint(occ_grid.data,occ_grid.info.width);
+    navigation_msgs::OccupancyGrid new_occ_grid;
+    auto &old_g = occ_grid.data;
+    auto &new_g = new_occ_grid.data;
+    auto &new_w = new_occ_grid.info.width;
+    auto &new_h = new_occ_grid.info.height;
+    new_h = occ_grid.info.height / 2;
+    new_w = occ_grid.info.width / 2;
+    new_g.resize(new_w*new_h);
+    new_occ_grid.info.resolution = occ_grid.info.resolution * 2;
+
+    for (int i = 0; i < new_w; ++i) {
+        for (int j = 0; j < new_h; ++j) {
+            // top left corner
+            int old_idx=i * 2+j * 2;
+            std::vector<int> pertition={old_g[old_idx],old_g[old_idx+1],old_g[old_idx+occ_grid.info.width],old_g[old_idx+occ_grid.info.width+1]};
+            new_g[i*new_w+j] = *std::max_element(pertition.begin(),pertition.end());
+        }
+    }
+    Vprint(new_g,new_w);
+    return new_occ_grid;
 }
 
 void Main() {
@@ -169,8 +194,9 @@ void Main() {
     occ_grid.info.resolution = 0.5;
     //std::vector<double> g={1,2,3};
     //g.resize(1);
-    Vprint(occ_grid.data,occ_grid.info.width);
-    averagePooling(occ_grid);
+
+    navigation_msgs::OccupancyGrid average_pooling=averagePooling(occ_grid);
+    navigation_msgs::OccupancyGrid max_pooling=maxPooling(occ_grid);
     return;
 }
 

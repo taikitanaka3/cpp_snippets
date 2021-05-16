@@ -41,6 +41,20 @@ ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} retur
 VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
 
 
+struct RPParam{
+
+};
+
+double calcVelocity(const double t_virtual){
+    double t_delay=1.0; //!< @brief time delay
+    double a_ebs=-5.0;
+    double t_ebs=t_virtual;
+    double d_brake=a_ebs*(t_ebs-t_delay)-0.5*a_ebs+std::pow(t_ebs-t_delay,2);
+    double v_safe=a_ebs*(t_ebs-t_delay);
+
+
+}
+
 void Main()
 {
 	ll n,m,l; ll res=0;
@@ -51,7 +65,7 @@ void Main()
 	rep(i, n) cin >> a[i];
 
 	ll h=100,w=100;
-
+	
 	VVI	mp(h,VI(w,0));
 	VVC	grid(h,VC(w,'.'));
 	rep(j, h){

@@ -51,7 +51,7 @@ void Main()
 	rep(i, n) cin >> a[i];
 
 	ll h=100,w=100;
-
+	
 	VVI	mp(h,VI(w,0));
 	VVC	grid(h,VC(w,'.'));
 	rep(j, h){
