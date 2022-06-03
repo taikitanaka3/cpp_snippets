@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll=long long int;
+using ld=long double;
+using VI=vector<ll>;
+using VD=vector<ld>;
+using VVI=vector<VI>;
+using VC=vector<char>;
+using VB=vector<bool>;
+using VVC=vector<VC>;
+using VS=vector<string>;
+using PLL =pair<ll,ll>;
+using PLD=pair<ld,ld>;
+using VPLL=vector<PLL>;
+#define print(x) std::cout<<x<<"\n"
+#define rep(i,n) for(ll i=0;i<(ll)(n);i++)
+#define repd(i,n) for(ll i=(ll)(n)-1;i>=0;i--)
+#define ALL(x) (x).begin(),(x).end()
+#define ALLR(x) (x).rbegin(),(x).rend()
+#define SZ(x) ((ll)(x).size())
+#define MAX(x) *max_element((x).begin(),(x).end())
+#define MIN(x) *min_element((x).begin(),(x).end())
+#define SORTR(x) sort((x).rbegin(),(x).rend())
+#define SORT(x) sort((x).begin(),(x).end())
+#define SUM(x) accumulate((x).begin(),(x).end(), 0)
+#define FILL(x,a) fill(x.begin(),x.end(),a)
+#define EACH(i,x) for(typeof((x).begin()) i=(x).begin(); i!=(x).end(); ++i)
+#define EXIST(v, x) (std::find(v.begin(), v.end(), x) != v.end())
+
+const ll INF = 1e18;
+const ld EPS   = 1e-10;
+const int MOD  = int(1e9)+7;
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+template <class BidirectionalIterator>
+bool next_partial_permutation(BidirectionalIterator first, BidirectionalIterator middle,BidirectionalIterator last){reverse(middle, last); return next_permutation(first , last);}
+ll gcd(ll x, ll y) { return (x % y)? gcd(y, x % y): y; }
+ll lcm(ll x, ll y) { return x / gcd(x, y) * y; }
+ll GCD(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = gcd(a, v[i]);} return a;}
+ll LCM(VI v){ll a = v[0]; for (ll i = 1; i<SZ(v); i++) {a = lcm(a, v[i]);} return a;}
+VI Bit2Vector(const ll bit, ll n) {	VI s;	rep(i,n) if (bit & (1 << i)) s.push_back(i); return s;}
+
+
+void Main()
+{
+    ll n,m,l; ll res=0;
+    string s,t,u; string sres="No or NO";
+
+    bool a=false;
+    bool b=false;
+    if(a==true and b==true){
+        print("and");
+    }else if(a==true or b==true){
+        print("or");
+    }else if(not a or b){
+        print("not");
+    }
+    /**
+     *
+     *       if (
+        maximize and distance_along_lanelet > blindspot.distance_along_lanelet or
+        not maximize and distance_along_lanelet < blindspot.distance_along_lanelet)
+     */
+
+    bool maximize=false;
+    bool distlllarger=true;
+    if(maximize and distlllarger or not maximize and not distlllarger){
+        print("OK");
+    }
+    maximize=false;
+    distlllarger=false;
+    if(maximize and distlllarger or not maximize and not distlllarger){
+        print("OK");
+    }
+
+    int aaa=101;
+    int bbb=101;
+    int ccc=100;
+    if(aaa==100 and bbb==100 or aaa==101 and ccc==100){
+        print("pass");
+    }
+
+    if(aaa==100 and bbb==100 or aaa==101 and ccc==100){
+        print("pass");
+    }
+
+
+
+    cout << res << "\n";
+    return;
+}
+
+int main()
+{
+    std::cin.tie(0);
+    std::ios_base::sync_with_stdio(false);
+    std::cout << std::fixed << std::setprecision(15);
+    Main();
+}
