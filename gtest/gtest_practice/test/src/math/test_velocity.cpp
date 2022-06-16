@@ -84,8 +84,8 @@ TEST(detectionArea, calcLateralDistance) {
       const double s = l - offset_from_ego_to_start;
       const double d = utils::calculateLateralDistanceFromTTC(s, p);
       const double eps = 1e-3;
-      //std::cout << "s: " << l << " v: " << p.v.v_ego << " d: " << d
-      //          << std::endl;
+      // std::cout << "s: " << l << " v: " << p.v.v_ego << " d: " << d
+      //           << std::endl;
       if (i == 0)
         EXPECT_NEAR(d, 2.5, eps);
       if (i == 5)
@@ -123,12 +123,12 @@ TEST(smoothDeceleration, calculatePredictedVelocity) {
       const double l = i * 1.0;
       const double vel = utils::calculatePredictedVelocity(v, l);
       const double eps = 1e-3;
-      //std::cout << "s: " << l << " v: " << vel << std::endl;
+      // std::cout << "s: " << l << " v: " << vel << std::endl;
     }
   }
 }
 
 TEST(bsearch, bsearch) {
   namespace utils = behavior_velocity_planner::occlusion_spot_utils;
-  const double x = utils::binarySearch(1.0,-10,-50,50);
+  const double x = utils::binarySearch(1.0, -10, -50, 50);
 }

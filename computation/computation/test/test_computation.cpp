@@ -1,12 +1,10 @@
 #include <bits/stdc++.h>
-#include <gtest/gtest.h>
 #include <computation/computation.hpp>
+#include <gtest/gtest.h>
 
 using namespace std::chrono;
 
-inline double myhypot(double a, double b) {
-  return a * a + b * b;
-}
+inline double myhypot(double a, double b) { return a * a + b * b; }
 
 void test_hypot() {
   size_t N = 1000000000;
@@ -36,57 +34,49 @@ void test_hypot() {
   }
 }
 
-
-TEST(test, test_hypot_) {
-  test_hypot();
-}
+TEST(test, test_hypot_) { test_hypot(); }
 
 TEST(perf, hypot_increment_none_const) {
   long double a = 1.0;
   long double b = 1.0;
-  long double c=0;
+  long double c = 0;
   // 0ms
-  for (long long int i = 0; i < 1000000000/*number of test*/; i++)
-  {
-    c += std::hypot(a,b);
+  for (long long int i = 0; i < 1000000000 /*number of test*/; i++) {
+    c += std::hypot(a, b);
   }
 }
 
 TEST(perf, hypot_increment) {
   const long double a = 1.0e32;
   const long double b = 1.0e32;
-  long double c=0;
+  long double c = 0;
   // 0ms
-  for (long long int i = 0; i < 1000000000/*number of test*/; i++)
-  {
-    c += std::hypot(a,b);
+  for (long long int i = 0; i < 1000000000 /*number of test*/; i++) {
+    c += std::hypot(a, b);
   }
-  std::cout<<std::endl;
+  std::cout << std::endl;
 }
 
 TEST(perf, use_hypot) {
   const long double a = 1.0e32;
   const long double b = 1.0e32;
   // 0ms
-  for (long long int i = 0; i < 1000000000/*number of test*/; i++)
-  {
-    const long double c = std::hypot(a,b);
+  for (long long int i = 0; i < 1000000000 /*number of test*/; i++) {
+    const long double c = std::hypot(a, b);
   }
-    std::cout<<std::endl;
+  std::cout << std::endl;
 }
 
 TEST(perf, sqrt_pow2) {
   const long double a = 1.0e32;
   const long double b = 1.0e32;
   // 0ms
-  for (long long int i = 0; i < 1000000000/*number of test*/; i++)
-  {
-    const long double c = std::sqrt(a*a+b*b);
+  for (long long int i = 0; i < 1000000000 /*number of test*/; i++) {
+    const long double c = std::sqrt(a * a + b * b);
   }
 }
 
-int main(int argc, char * argv[])
-{
+int main(int argc, char *argv[]) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

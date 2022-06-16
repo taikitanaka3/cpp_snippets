@@ -5,65 +5,59 @@
  *      Author: tanakasan
  */
 
-#ifndef MAIN_H_
-#define MAIN_H_
+#ifndef ECLIPS_CPP__STATIC_TEST__MAIN_H_
+#define ECLIPS_CPP__STATIC_TEST__MAIN_H_
 
 #define _USE_MATH_DEFINES
 
-#include <stdio.h>
 #include <iostream>
-#include <vector>
 #include <math.h>
+#include <stdio.h>
+#include <vector>
 using std::cout;
 using std::endl;
 using std::vector;
 
-struct occg{
-	static float x;
-
+struct occg {
+  static float x;
 };
-class constc{
+class constc {
 public:
-	const int i;
+  const int i;
 };
 
-struct Point
-{
-	float X;
-	float Y;
-	float Z;
-	Point(float x = 0.f, float y = 0.f, float z = 0.f)
-	{
-		X = x;
-		Y = y;
-		Z = z;
-	}
+struct Point {
+  float X;
+  float Y;
+  float Z;
+  Point(float x = 0.f, float y = 0.f, float z = 0.f) {
+    X = x;
+    Y = y;
+    Z = z;
+  }
 };
 
-struct Pose
-{
-	static Point point;
-	static float angle;
+struct Pose {
+  static Point point;
+  static float angle;
+
 private:
 };
 
-struct PoseArray
-{
-	static vector<Pose> pose;
-private:
-	//PoseArray();
-};
-
-
-struct Waypoints
-{
-	static vector<PoseArray> waypoints;
-	static Point target;
-	static float angle;
+struct PoseArray {
+  static vector<Pose> pose;
 
 private:
-	Waypoints();
+  // PoseArray();
 };
 
+struct Waypoints {
+  static vector<PoseArray> waypoints;
+  static Point target;
+  static float angle;
 
-#endif /* MAIN_H_ */
+private:
+  Waypoints();
+};
+
+#endif // ECLIPS_CPP__STATIC_TEST__MAIN_H_

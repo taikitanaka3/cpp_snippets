@@ -53,7 +53,7 @@ int MultiThreadPractice::main() {
   return 0;
 }
 
-void TestThread::run(){
+void TestThread::run() {
   tt.t1 = std::shared_ptr<std::thread>();
   t1 = std::make_shared<std::thread>(func);
 }
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
   // rclcpp::spin(std::make_shared<MultiThreadPractice>());
   TestThread tt;
   tt.run();
-  
+
   rclcpp::shutdown();
   return 0;
 }

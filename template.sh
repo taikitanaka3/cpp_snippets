@@ -1,28 +1,26 @@
 #!/bin/bash
 
-cd `dirname $0`
-dir=`pwd`
+cd $(dirname $0)
+dir=$(pwd)
 
 echo $dir
 
 contest=$1
 number=$2
 
-
 echo "Create contest directory..."
 mkdir $contest
 cd $contest
-
 
 echo "Create contest number directory..."
 mkdir $number
 cd $number
 
-
 echo "Create files."
 
 # cpp file template
-template=$(cat <<EOS
+template=$(
+    cat <<EOS
 #include <bits/stdc++.h>
 using namespace std;
 using ll=long long int;
@@ -76,7 +74,7 @@ void Main()
 	rep(i, n) cin >> a[i];
 
 	ll h=100,w=100;
-	
+
 	VVI	mp(h,VI(w,0));
 	VVC	grid(h,VC(w,'.'));
 	rep(j, h){
@@ -103,10 +101,9 @@ EOS
 
 filelist=("a" "b" "c" "d" "e" "f")
 
-for file in ${filelist[@]}
-do
+for file in ${filelist[@]}; do
     touch ${file}.cpp
-    echo "$template" > ${file}.cpp
+    echo "$template" >${file}.cpp
     echo "created file: ${file}.cpp"
 done
 
@@ -115,13 +112,12 @@ echo "Add executable into CMakeLists.txt"
 cd ..
 
 # Write settings into CMakeLists.txt
-echo "" >> ./CMakeLists.txt
-echo "cmake_minimum_required(VERSION 3.10)" >> ./CMakeLists.txt
+echo "" >>./CMakeLists.txt
+echo "cmake_minimum_required(VERSION 3.10)" >>./CMakeLists.txt
 #echo "project($contest)">> ./CMakeLists.txt
-echo "set(CMAKE_CXX_STANDARD 17)" >> ./CMakeLists.txt
+echo "set(CMAKE_CXX_STANDARD 17)" >>./CMakeLists.txt
 
-echo "# Contest $contest $number" >> ./CMakeLists.txt
-for file in ${filelist[@]}
-do
-    echo "add_executable(${number}_${file} $number/${file}.cpp)" >> ./CMakeLists.txt
+echo "# Contest $contest $number" >>./CMakeLists.txt
+for file in ${filelist[@]}; do
+    echo "add_executable(${number}_${file} $number/${file}.cpp)" >>./CMakeLists.txt
 done

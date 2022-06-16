@@ -15,11 +15,10 @@ using std::list;
 using std::string;
 using std::vector;
 
-struct TestThread{
-std::mutex mtx_;
-std::shared_ptr<std::thread> t1;
-void run();
-
+struct TestThread {
+  std::mutex mtx_;
+  std::shared_ptr<std::thread> t1;
+  void run();
 };
 
 struct NumberGenerator {

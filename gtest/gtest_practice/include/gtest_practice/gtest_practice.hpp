@@ -17,4 +17,4 @@
 
 #include "gtest_practice/math/range.hpp"
 
-#endif  // GTEST_PRACTICE__GTEST_PRACTICE_HPP_
+#endif // GTEST_PRACTICE__GTEST_PRACTICE_HPP_

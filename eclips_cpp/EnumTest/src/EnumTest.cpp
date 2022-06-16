@@ -9,52 +9,37 @@
 #include <iostream>
 using namespace std;
 
+enum Eday { sunday, monday };
 
-enum Eday{
-	sunday,
-	monday
-};
-
-void enumfunc(enum Eday day){
-	if(day==sunday){
-		cout<<"sunday";
-	}
+void enumfunc(enum Eday day) {
+  if (day == sunday) {
+    cout << "sunday";
+  }
 }
 
-
-
-class TestC{
+class TestC {
 public:
-	enum Etest{
-		right,
-		ledft
-	};
+  enum Etest { right, ledft };
 };
 
+enum enumfuncC(enum TestC::Etest test) {
+  cout << test;
 
-enum enumfuncC(enum TestC::Etest test){
-	cout<<test;
+  cout << test.right;
 
-	cout<<test.right;
-
-	return test;
+  return test;
 }
-
 
 int main() {
 
-	int day=Eday::sunday;
-	//enum newEnum=Eday::monday;
-	Eday::sunday;
+  int day = Eday::sunday;
+  // enum newEnum=Eday::monday;
+  Eday::sunday;
 
+  enumfunc(Eday::sunday);
 
+  enumfuncC(TestC::Etest::right);
 
-	enumfunc(Eday::sunday);
-
-	enumfuncC(TestC::Etest::right);
-
-
-
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	return 0;
+  cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+  return 0;
 }

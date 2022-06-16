@@ -69,10 +69,8 @@ struct SafeMotion {
   double safe_velocity;
 };
 
-
-
-
-inline double binarySearch(const double j,const double a,const double v, const double d, const double min, const double max) {
+inline double binarySearch(const double j, const double a, const double v,
+                           const double d, const double min, const double max) {
   auto f = [](const double t, const double j, const double a, const double v,
               const double d) {
     return j * t * t * t / 6.0 + a * t * t / 2.0 + v * t - d;
@@ -81,47 +79,39 @@ inline double binarySearch(const double j,const double a,const double v, const d
   double lower = min;
   double upper = max;
   double t;
-  for (int i=0;i<20;i++) {
+  for (int i = 0; i < 20; i++) {
     t = (lower + upper) / 2;
     const double fx = f(t, j, a, v, 0.0);
-    //std::cout<<"fx"<<fx<<"upper"<<upper<<"lower"<<lower<<"t"<<t<<std::endl;
-    if (std::abs(fx) < eps){
-      //std::cout<<"break"<<std::endl;
+    // std::cout<<"fx"<<fx<<"upper"<<upper<<"lower"<<lower<<"t"<<t<<std::endl;
+    if (std::abs(fx) < eps) {
+      // std::cout<<"break"<<std::endl;
       break;
-    }
-    else if (fx > 0)
-    {  
+    } else if (fx > 0) {
       upper = t;
-    }
-    else {
+    } else {
       lower = t;
     }
   }
   return 0;
 }
 
-
-inline double binarySearch(double x,double b,const double min, const double max) {
-  auto f = [](double x,double b) {
-    return x + b;
-  };
+inline double binarySearch(double x, double b, const double min,
+                           const double max) {
+  auto f = [](double x, double b) { return x + b; };
   const double eps = 1e-3;
   double lower = min;
   double upper = max;
   double t;
-  for (int i=0;i<20;i++) {
+  for (int i = 0; i < 20; i++) {
     t = (lower + upper) / 2;
-    const double fx = f(t,b);
-    //std::cout<<"b"<<b<<"fx"<<fx<<"upper"<<upper<<"lower"<<lower<<"t"<<t<<std::endl;
-    if (std::abs(fx) < eps){
-      //std::cout<<"break"<<std::endl;
+    const double fx = f(t, b);
+    // std::cout<<"b"<<b<<"fx"<<fx<<"upper"<<upper<<"lower"<<lower<<"t"<<t<<std::endl;
+    if (std::abs(fx) < eps) {
+      // std::cout<<"break"<<std::endl;
       break;
-    }
-    else if (fx > 0)
-    {  
+    } else if (fx > 0) {
       upper = t;
-    }
-    else {
+    } else {
       lower = t;
     }
   }
@@ -136,11 +126,12 @@ inline double binarySearch(double x,double b,const double min, const double max)
 inline double calculatePredictedVelocity(const Velocity &v, const double l) {
 
   auto ft = [](const double t, const double j, const double a, const double v,
-              const double d) {
+               const double d) {
     return j * t * t * t / 6.0 + a * t * t / 2.0 + v * t - d;
   };
-  auto vt = [](const double t, const double j, const double a,
-                const double v) { return j * t * t / 2.0 + a * t + v; };
+  auto vt = [](const double t, const double j, const double a, const double v) {
+    return j * t * t / 2.0 + a * t + v;
+  };
   const double j = v.max_stop_jerk;
   const double a0 = v.a_ego;
   const double a_max = v.max_stop_accel;
@@ -152,7 +143,7 @@ inline double calculatePredictedVelocity(const Velocity &v, const double l) {
   if (l < d_const_jerk_stop) {
     double lower = 0;
     double upper = t_const_jerk;
-    const double t = binarySearch(j,a0,v0,l,0,t_const_jerk);
+    const double t = binarySearch(j, a0, v0, l, 0, t_const_jerk);
     const double velocity = vt(t, v.max_stop_jerk, a0, v0);
     return velocity;
     // case where target velocity is within constant max accel after constant
@@ -160,7 +151,7 @@ inline double calculatePredictedVelocity(const Velocity &v, const double l) {
   } else {
     const double l1 = l - d_const_jerk_stop;
     const double v1 = vt(t_const_jerk, v.max_stop_jerk, a0, v0);
-    const double t = binarySearch(0,a_max,v1,l1,t_const_jerk,100);
+    const double t = binarySearch(0, a_max, v1, l1, t_const_jerk, 100);
     const double velocity = vt(t, v.max_stop_jerk, v.a_ego, v.v_ego);
     return velocity;
   }

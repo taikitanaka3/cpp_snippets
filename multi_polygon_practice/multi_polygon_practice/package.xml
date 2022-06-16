@@ -6,9 +6,9 @@
   <description>The gtest package</description>
   <license>Apache License 2.0</license>
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
+  <depend>geometry_msgs</depend>
   <depend>libboost-dev</depend>
   <depend>tf2_geometry_msgs</depend>
-  <depend>geometry_msgs</depend>
 
   <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>

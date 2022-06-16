@@ -18,13 +18,11 @@
 #include <iostream>
 #include <vector>
 
-class LinearInterpolate
-{
+class LinearInterpolate {
 public:
-    LinearInterpolate(){};
-    ~LinearInterpolate(){};
-    static bool interpolate(
-            const std::vector<double> & base_index, const std::vector<double> & base_value,
-            const double & return_index, double & return_value);
+  LinearInterpolate(){};
+  ~LinearInterpolate(){};
+  static bool interpolate(const std::vector<double> &base_index,
+                          const std::vector<double> &base_value,
+                          const double &return_index, double &return_value);
 };
-

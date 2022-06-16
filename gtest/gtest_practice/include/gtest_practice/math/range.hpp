@@ -20,8 +20,6 @@
 #include <stdexcept>
 #include <vector>
 
-namespace gtest_practice
-{
-}  // namespace gtest_practice
+namespace gtest_practice {} // namespace gtest_practice
 
-#endif  // GTEST_PRACTICE__MATH__RANGE_HPP_
+#endif // GTEST_PRACTICE__MATH__RANGE_HPP_

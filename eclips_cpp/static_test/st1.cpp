@@ -5,12 +5,8 @@
  *      Author: tanakasan
  */
 
-
 #include "main.h"
 
 #include <stdio.h>
 
-void test2(){
-
-	printf("%f",occg::x);
-}
+void test2() { printf("%f", occg::x); }

@@ -12,14 +12,14 @@ using namespace std;
 
 using std::map;
 
-namespace map_{
-	int a;
+namespace map_ {
+int a;
 }
 
 int main() {
-	map_::a=0;
+  map_::a = 0;
 
-	map<int,int> b;
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	return 0;
+  map<int, int> b;
+  cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+  return 0;
 }

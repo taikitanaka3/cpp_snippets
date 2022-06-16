@@ -39,15 +39,15 @@
 
 #include <vector>
 
-TEST(vector,vector_insert) {
-  std::vector<int> a={0,2,4};
-  std::vector<int> b={1,3,5};
-  for(int i = 0;i < b.size();i++){
+TEST(vector, vector_insert) {
+  std::vector<int> a = {0, 2, 4};
+  std::vector<int> b = {1, 3, 5};
+  for (int i = 0; i < b.size(); i++) {
     // i=0 0->1 -> {0 1 2 4}
-    // i=1 
-    a.insert(a.begin()+i*2+1,b.at(i));
+    // i=1
+    a.insert(a.begin() + i * 2 + 1, b.at(i));
   }
-  for(auto i:a){
-      //std::cout<<i<<std::endl;
+  for (auto i : a) {
+    // std::cout<<i<<std::endl;
   }
 }

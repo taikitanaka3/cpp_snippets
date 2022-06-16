@@ -1,34 +1,32 @@
 #!/bin/bash
 
-cd `dirname $0`
-dir=`pwd`
+cd $(dirname $0)
+dir=$(pwd)
 
 echo $dir
 
 package_name=$1
 
-
 echo "Create package_name directory..."
 mkdir $package_name
 cd $package_name
 
-
 echo "Create package_name directory..."
 mkdir $package_name
 cd $package_name
-
 
 echo "Create files."
 
 # hpp file template
-template_hpp=$(cat <<EOS
+template_hpp=$(
+    cat <<EOS
 #include <bits/stdc++.h>
 EOS
 )
 
-
 # cpp file template
-template_cpp=$(cat <<EOS
+template_cpp=$(
+    cat <<EOS
 #include <bits/stdc++.h>
 #include <$package_name/$package_name.hpp>
 
@@ -41,7 +39,8 @@ EOS
 )
 
 # test file template
-template_test=$(cat <<EOS
+template_test=$(
+    cat <<EOS
 #include <bits/stdc++.h>
 #include <gtest/gtest.h>
 #include <$package_name/$package_name.hpp>
@@ -59,7 +58,8 @@ EOS
 )
 
 # cmake file template
-template_cmake=$(cat <<EOS
+template_cmake=$(
+    cat <<EOS
 cmake_minimum_required(VERSION 3.5)
 project($package_name)
 
@@ -95,7 +95,8 @@ EOS
 )
 
 # xml template
-template_xml=$(cat <<EOS
+template_xml=$(
+    cat <<EOS
 <?xml version="1.0"?>
 <package format="2">
   <name>$package_name</name>
@@ -115,18 +116,16 @@ template_xml=$(cat <<EOS
 EOS
 )
 
-
 filelist=($package_name)
 
-for file in ${filelist[@]}
-do
+for file in ${filelist[@]}; do
     mkdir -p src/${file}
     mkdir -p include/${file}
     mkdir test
-    echo "$template_test" > test/test_${file}.cpp
-    echo "$template_hpp" > include/${file}/${file}.hpp
-    echo "$template_cpp" > src/${file}/${file}.cpp
-    echo "$template_xml" > package.xml
-    echo "$template_cmake" >  CMakeLists.txt
+    echo "$template_test" >test/test_${file}.cpp
+    echo "$template_hpp" >include/${file}/${file}.hpp
+    echo "$template_cpp" >src/${file}/${file}.cpp
+    echo "$template_xml" >package.xml
+    echo "$template_cmake" >CMakeLists.txt
     echo "created file: ${file}.cpp"
 done

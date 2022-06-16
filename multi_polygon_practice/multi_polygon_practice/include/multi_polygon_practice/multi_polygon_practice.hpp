@@ -53,12 +53,8 @@ std::vector<Polygon2d> daPoly() {
   Polygon2d poly, bx;
   bg::exterior_ring(poly) =
       boost::assign::list_of<Point2d>(1, 1)(5, 5)(5, 1)(1, 1);
-  bg::exterior_ring(bx) = boost::assign::list_of<Point2d>
-        (2, 1)
-        (5, 5)
-        (5, 1)
-        (1, 1)
-        ;
+  bg::exterior_ring(bx) =
+      boost::assign::list_of<Point2d>(2, 1)(5, 5)(5, 1)(1, 1);
 
   std::vector<Polygon2d> out;
   bg::union_(bx, poly, out);

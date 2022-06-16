@@ -21,16 +21,14 @@
 #include <string>
 #include <vector>
 
-class CSVLoader
-{
+class CSVLoader {
 public:
-    CSVLoader(std::string csv_path);
-    ~CSVLoader();
+  CSVLoader(std::string csv_path);
+  ~CSVLoader();
 
-    bool readCSV(std::vector<std::vector<std::string>> & result, const char delim = ',');
+  bool readCSV(std::vector<std::vector<std::string>> &result,
+               const char delim = ',');
 
 private:
-    std::string csv_path_;
+  std::string csv_path_;
 };
-
-

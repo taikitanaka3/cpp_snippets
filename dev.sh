@@ -25,6 +25,7 @@ PKG=computation
 #PKG=behavior_path_planner
 #PKG=lanelet2_extension
 #PKG=interpolation
+PKG=window_recorder
 
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
@@ -33,26 +34,25 @@ PKG=computation
 #PKG=path_smoother
 case $1 in
 test)
-	colcon test --packages-select "$PKG" --event-handlers console_direct+
-	;;
+    colcon test --packages-select "$PKG" --event-handlers console_direct+
+    ;;
 sim)
-	kill -9 %1
-	ros2 launch autoware_launch planning_simulator.launch.xml map_path:="$MAP" vehicle_model:="$VEHICLE" sensor_model:="$SENSOR"
-	;;
+    kill -9 %1
+    ros2 launch autoware_launch planning_simulator.launch.xml map_path:="$MAP" vehicle_model:="$VEHICLE" sensor_model:="$SENSOR"
+    ;;
 build)
-	colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --continue-on-error
-	;;
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --continue-on-error
+    ;;
 start)
-	ros2 node kill $(rosnode list | grep "$PKG")
-	;;
+    ros2 node kill $(rosnode list | grep "$PKG")
+    ;;
 delete)
-	sudo rm -r install/"$PKG" build/"$PKG"
-	;;
+    sudo rm -r install/"$PKG" build/"$PKG"
+    ;;
 debug)
-	colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --symlink-install --packages-select "$PKG"
-	;;
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --symlink-install --packages-select "$PKG"
+    ;;
 *)
-	colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --packages-select "$PKG"
-	;;
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --packages-select "$PKG"
+    ;;
 esac
-
