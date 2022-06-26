@@ -72,7 +72,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
-find_package(Boost REQUIRED)
 ament_auto_add_library($package_name SHARED
   src/$package_name/$package_name.cpp
 )
@@ -105,7 +104,6 @@ template_xml=$(
   <description>The gtest package</description>
   <license>Apache License 2.0</license>
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
-  <depend>libboost-dev</depend>
   <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <export>
