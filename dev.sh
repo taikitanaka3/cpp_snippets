@@ -20,13 +20,13 @@ PKG=gtest_practice
 PKG=multi_thread_practice
 PKG=multi_polygon_practice
 PKG=cv_practice
-PKG=computation
+#PKG=computation
 #PKG=lowpass
 #PKG=behavior_path_planner
 #PKG=lanelet2_extension
 #PKG=interpolation
-PKG=window_recorder
-PKG=rviz_marker
+#PKG=window_recorder
+#PKG=rviz_marker
 
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
