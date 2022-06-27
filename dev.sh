@@ -25,7 +25,7 @@ PKG=cv_practice
 #PKG=behavior_path_planner
 #PKG=lanelet2_extension
 #PKG=interpolation
-#PKG=window_recorder
+PKG=window_recorder
 #PKG=rviz_marker
 
 #PKG=groot
