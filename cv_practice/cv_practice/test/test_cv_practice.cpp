@@ -27,6 +27,30 @@ TEST(test, fillpoly) {
   cv::waitKey(150000);
 }
 
+TEST(test, fillpoly_cross_case) {
+  std::vector<std::vector<cv::Point>> cv_polygons;
+
+  // generate overwrapping polygon
+  cv_polygons.emplace_back(std::vector<cv::Point>{
+      cv::Point(0, 20), cv::Point(0, 40), cv::Point(80, 40),cv::Point(80, 20)});
+  cv_polygons.emplace_back(std::vector<cv::Point>{
+      cv::Point(40, 0), cv::Point(60, 0), cv::Point(60, 80),cv::Point(40, 80)});
+
+  cv::Mat fill_poly_image(100, 100, CV_8UC1, cv::Scalar(0));
+  cv::Mat fill_convex_poly_image(100, 100, CV_8UC1, cv::Scalar(0));
+
+  cv::fillPoly(fill_poly_image, cv_polygons, cv::Scalar(255));
+  for (auto p : cv_polygons) {
+    cv::fillConvexPoly(fill_convex_poly_image, p, cv::Scalar(255));
+  }
+  cv::namedWindow("fill_poly_image", cv::WINDOW_NORMAL);
+  cv::imshow("fill_poly_image", fill_poly_image);
+  cv::namedWindow("fill_convex_poly_image", cv::WINDOW_NORMAL);
+  cv::imshow("fill_convex_poly_image", fill_convex_poly_image);
+  cv::waitKey(150000);
+  cv::waitKey(150000);
+}
+
 TEST(test, erode) {
   cv::Mat image;
   cv::Mat cv_image(100, 100, CV_8UC1, cv::Scalar(0));
