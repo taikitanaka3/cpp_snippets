@@ -11,7 +11,7 @@ PKG=raw_vehicle_cmd_converter
 PKG=autoware_auto_control_msgs
 PKG=pointcloud_preprocessor
 PKG=external_cmd_converter
-PKG=raw_vehicle_cmd_converter
+
 #PKG=external_cmd_converter
 PKG=pacmod_interface
 PKG=tier4_autoware_utils
@@ -27,7 +27,7 @@ PKG=cv_practice
 #PKG=interpolation
 PKG=window_recorder
 #PKG=rviz_marker
-
+PKG=delay_estimator
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
 #PKG=steer_offset_estimator
