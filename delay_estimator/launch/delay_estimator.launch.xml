@@ -1,0 +1,7 @@
+<launch>
+  <arg name="delay_estimator_param" default="$(find-pkg-share delay_estimator)/config/delay_estimator.yaml" />
+  <!--  delay estimator -->
+  <node pkg="delay_estimator" exec="delay_estimator" name="delay_estimator" output="screen" respawn="true">
+    <param from="$(var delay_estimator_param)"/>
+  </node>
+</launch>

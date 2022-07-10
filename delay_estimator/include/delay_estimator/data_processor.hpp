@@ -28,8 +28,8 @@ struct Params
 
   };
   struct DataSize{
-    size_t total_data_size;
-    size_t validation_data_size;
+    size_t total_data;
+    size_t validation_data;
     double sampling_duration;   // [s]
     double sampling_hz;
     double estimation_hz;
@@ -41,7 +41,7 @@ struct Params
     bool use_lowpass_filter;    
   };
   Threshold thresh;
-  DataSize data_size;
+  DataSize data;
   Filter filter;
   bool is_showing_debug_info;
 };
@@ -183,7 +183,7 @@ inline UpdateResult updateData(
     const double input_stddev = getStddevFromVector(input_data_list.validation);
     const double response_stddev = getStddevFromVector(response_data_list.validation);
     max_stddev = std::max(input_stddev, response_stddev);
-    if(input_data_list.validation.size() >= params.data_size.validation_data_size){
+    if(input_data_list.validation.size() >= params.data.validation_data){
       input_data_list.validation.pop_front();
       response_data_list.validation.pop_front();
     }
@@ -194,7 +194,7 @@ inline UpdateResult updateData(
   } else {
     input_data_list.data.emplace_back(input);
     response_data_list.data.emplace_back(response);
-    if(input_data_list.data.size() < params.data_size.total_data_size){
+    if(input_data_list.data.size() < params.data.total_data){
       // adding data
       return UpdateResult::INIT;
     } else {
