@@ -5,6 +5,8 @@
   <maintainer email="tanaka3@gmail.com">tanaka3</maintainer>
   <description>The gtest package</description>
   <license>Apache License 2.0</license>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>

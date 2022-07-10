@@ -9,8 +9,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options()
 endif()
 find_package(ament_cmake_auto REQUIRED)
-ament_auto_find_build_dependencies()
-ament_auto_add_library(delay_estimator SHARED
+  ament_auto_find_build_dependencies()
+  ament_auto_add_library(delay_estimator SHARED
   src/delay_estimator/delay_estimator.cpp
 )
 
@@ -25,4 +25,7 @@ if(BUILD_TESTING)
     delay_estimator
   )
 endif()
-ament_auto_package()
+
+ament_auto_package(INSTALL_TO_SHARE
+  launch
+  config)
