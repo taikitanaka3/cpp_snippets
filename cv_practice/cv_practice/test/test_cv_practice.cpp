@@ -31,10 +31,12 @@ TEST(test, fillpoly_cross_case) {
   std::vector<std::vector<cv::Point>> cv_polygons;
 
   // generate overwrapping polygon
-  cv_polygons.emplace_back(std::vector<cv::Point>{
-      cv::Point(0, 20), cv::Point(0, 40), cv::Point(80, 40),cv::Point(80, 20)});
-  cv_polygons.emplace_back(std::vector<cv::Point>{
-      cv::Point(40, 0), cv::Point(60, 0), cv::Point(60, 80),cv::Point(40, 80)});
+  cv_polygons.emplace_back(
+      std::vector<cv::Point>{cv::Point(0, 20), cv::Point(0, 40),
+                             cv::Point(80, 40), cv::Point(80, 20)});
+  cv_polygons.emplace_back(
+      std::vector<cv::Point>{cv::Point(40, 0), cv::Point(60, 0),
+                             cv::Point(60, 80), cv::Point(40, 80)});
 
   cv::Mat fill_poly_image(100, 100, CV_8UC1, cv::Scalar(0));
   cv::Mat fill_convex_poly_image(100, 100, CV_8UC1, cv::Scalar(0));

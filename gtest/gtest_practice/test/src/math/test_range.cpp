@@ -52,19 +52,16 @@ TEST(vector, vector_insert) {
   }
 }
 
-
 TEST(vector, test_for) {
-  std::vector<int> numbers {0, 1, 2, 3, 4};
+  std::vector<int> numbers{0, 1, 2, 3, 4};
   int a = 1;
   int b = 3;
 
   // iteratorで内部要素を回し、該当値であればその要素を削除
-  for (auto itr = numbers.begin(); itr != numbers.end(); itr++)
-  {
-      if (((*itr) == a) || ((*itr) == b))
-      {
-         itr = numbers.erase(itr);
-      }
-      std::cout<<*itr<<std::endl;
+  for (auto itr = numbers.begin(); itr != numbers.end(); itr++) {
+    if (((*itr) == a) || ((*itr) == b)) {
+      itr = numbers.erase(itr);
+    }
+    std::cout << *itr << std::endl;
   }
 }

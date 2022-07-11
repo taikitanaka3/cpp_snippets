@@ -7,7 +7,9 @@ using namespace std;
 using namespace cv;
 
 TEST(test, imread) {
-  cv::VideoCapture capture("/home/$USER/cpp_snippets/window_recorder/window_recorder/test/opencv-logo001.png", cv::CAP_IMAGES);
+  cv::VideoCapture capture("/home/$USER/cpp_snippets/window_recorder/"
+                           "window_recorder/test/opencv-logo001.png",
+                           cv::CAP_IMAGES);
   if (!capture.isOpened()) {
   }
   cv::Mat image;
@@ -17,7 +19,7 @@ TEST(test, imread) {
     // Capture Image from File ( e.g. input_030.jpg, input_031.jpg, ... )
     capture >> image;
     if (image.empty()) {
-      std::cout<<"em"<<std::endl;
+      std::cout << "em" << std::endl;
       break;
     }
     /* Image Processing */

@@ -4,22 +4,21 @@
 #include <chrono>
 #include <cmath>
 #include <deque>
+#include <memory>
 #include <numeric>
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
-#include <memory>
 
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/float64_multi_array.hpp"
-#include "std_msgs/msg/float64.hpp"
 #include "delay_estimator/data_processor.hpp"
 #include "delay_estimator/debugger.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/float64.hpp"
+#include "std_msgs/msg/float64_multi_array.hpp"
 
 using namespace data_processor;
 
-class DelayEstimator
-{
+class DelayEstimator {
 private:
   UpdateResult update_result_;
   Statistic staticstic_;
@@ -31,24 +30,23 @@ private:
   double smoothed_response_;
 
 public:
-  DelayEstimator()=default;
+  DelayEstimator() = default;
   Data input_;
   Data response_;
-  EstimationResult estimate(const Params & params,
-   const double input,const double response,std::unique_ptr<Debugger> &debugger);
-  DelayEstimator(
-    rclcpp::Node * node, const Params & params, const std::string & name);
-  DelayEstimator(rclcpp::Node * node, const std::string & name);
+  EstimationResult estimate(const Params &params, const double input,
+                            const double response,
+                            std::unique_ptr<Debugger> &debugger);
+  DelayEstimator(rclcpp::Node *node, const Params &params,
+                 const std::string &name);
+  DelayEstimator(rclcpp::Node *node, const std::string &name);
   double getDelayTime();
 
   std::unique_ptr<Debugger> debugger_;
 };
 
-
 using std_msgs::msg::Float64;
 
-class DelayEstimatorNode : public rclcpp::Node
-{
+class DelayEstimatorNode : public rclcpp::Node {
 private:
   // subscription
   rclcpp::Subscription<Float64>::SharedPtr sub_command_ptr_;
@@ -65,13 +63,13 @@ private:
   std::unique_ptr<DelayEstimator> delay_estimator_;
   std::unique_ptr<Debugger> debugger_;
 
-  double input_value_={0};
-  double response_value_={0};
+  double input_value_ = {0};
+  double response_value_ = {0};
 
   void callbackInput(const Float64::ConstSharedPtr msg);
   void callbackResponse(const Float64::ConstSharedPtr msg);
   void timerCallback();
 
 public:
-  explicit DelayEstimatorNode(const rclcpp::NodeOptions & node_options);
+  explicit DelayEstimatorNode(const rclcpp::NodeOptions &node_options);
 };

@@ -3,18 +3,18 @@ delay_estimator:
     name: "sample"
     is_showing_debug_info: true # set false to test at pubic road
     thresh:
-      #valid_min_value: 
-      #valid_min_value: 
+      #valid_min_value:
+      #valid_min_value:
       validation_data_stddev: 0.2
       valid_peak_cross_correlation: 0.8
       valid_delay_index_ratio: 0.1
     data:
-      sampling_hz: 30.0       # data sampling hz
-      estimation_hz: 10.0     # estimation hz
+      sampling_hz: 30.0 # data sampling hz
+      estimation_hz: 10.0 # estimation hz
       sampling_duration: 10.0 # sampling duration to estimate delay (range 5~20 sec)
       validation_duration: 1.0 # to check if it's valid data or not (range  0.5~2 sec)
       valid_delay_index_ratio: 0.1 # below 0.2 is usual
     filter:
       use_lowpass_filter: true #
-      cutoff_hz_input: 0.5     # smooth input (range 0.01~7.0)
-      cutoff_hz_output: 0.1    # smooth output (range 0.01~7.0)
+      cutoff_hz_input: 0.5 # smooth input (range 0.01~7.0)
+      cutoff_hz_output: 0.1 # smooth output (range 0.01~7.0)
