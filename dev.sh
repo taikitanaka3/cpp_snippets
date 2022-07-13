@@ -30,7 +30,7 @@ PKG=window_recorder
 PKG=delay_estimator
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
-#PKG=steer_offset_estimator
+PKG=boost_reference
 
 #PKG=path_smoother
 case $1 in
