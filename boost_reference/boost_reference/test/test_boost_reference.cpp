@@ -37,6 +37,21 @@ TEST(test, compare) {
   }
 }
 
+TEST(test, set_value) {
+  {
+    boost::optional<double> a;
+    a=1;
+    std::cout<<"a ptr"<<*a<<std::endl;
+    // std::cout<<"a val"<<a<<std::endl;
+    *a=1;
+    std::cout<<"a ptr"<<*a<<std::endl;
+    // std::cout<<"a val"<<a<<std::endl;
+
+    a.get()=1;
+    std::cout<<"a ptr"<<*a<<std::endl;
+  }
+}
+
 int main(int argc, char *argv[]) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
