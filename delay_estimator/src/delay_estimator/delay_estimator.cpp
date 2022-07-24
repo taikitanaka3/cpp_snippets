@@ -25,7 +25,7 @@ EstimationResult DelayEstimator::estimate(const Params &params,
     const double conf = cross_correlation_.at(delay_index);
     const double delay_time =
         static_cast<double>(delay_index) * delay_per_index;
-    if (conf < params.thresh.valid_peak_cross_correlation) {
+    if (conf < params.thresh.valid_cross_correlation) {
       return EstimationResult::LOWCORRELATION;
     }
     const double fitlered_value =
@@ -56,42 +56,81 @@ DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
     : Node("delay_estimator", node_options) {
   const double inf = std::numeric_limits<double>::max();
 
+  const auto dp = [this](const std::string &str, auto def_val) {
+    std::string name = str;
+    return this->declare_parameter(name, def_val);
+  };
+
   // thresh
   auto &pt = params_.thresh;
   {
-    pt.valid_min_value = declare_parameter("thresh/valid_min_value", -inf);
-    pt.valid_max_value = declare_parameter("thresh/valid_max_value", inf);
-    pt.validation_data_stddev =
-        declare_parameter("thresh/validation_data_stddev", 0.2);
-    pt.valid_peak_cross_correlation =
-        declare_parameter("thresh/valid_peak_cross_correlation", 0.8);
-    pt.valid_delay_index_ratio =
-        declare_parameter("thresh/valid_delay_index_ratio", 0.1);
+    pt.valid_min_value = dp("thresh/valid_min_value", -inf);
+    pt.valid_max_value = dp("thresh/valid_max_value", inf);
+    pt.validation_data_stddev = dp("thresh/validation_data_stddev", 0.2);
+    pt.valid_cross_correlation = dp("thresh/valid_cross_correlation", 0.8);
+    pt.valid_delay_index_ratio = dp("thresh/valid_delay_index_ratio", 0.1);
   }
 
   // data size
   auto &pd = params_.data;
   {
-    pd.sampling_hz = declare_parameter("data/sampling_hz", 30.0);
-    pd.estimation_hz = declare_parameter("data/estimation_hz", 10.0);
-    pd.sampling_duration = declare_parameter("data/sampling_duration", 10.0);
-    pd.validation_ratio = declare_parameter("data/validation_ratio", 0.2);
+    pd.sampling_hz = dp("data/sampling_hz", 30.0);
+    pd.estimation_hz = dp("data/estimation_hz", 10.0);
+    pd.sampling_duration = dp("data/sampling_duration", 10.0);
+    pd.validation_ratio = dp("data/validation_ratio", 0.2);
   }
 
   // fitler
   auto &pf = params_.filter;
   {
-    pf.use_lowpass_filter =
-        declare_parameter("filter/use_lowpass_filter", true);
-    pf.cutoff_hz_in = declare_parameter("filter/cutoff_hz_input", 0.5);
-    pf.cutoff_hz_out = declare_parameter("filter/cutoff_hz_output", 0.1);
+    pf.use_lowpass_filter = dp("filter/use_lowpass_filter", true);
+    pf.cutoff_hz_in = dp("filter/cutoff_hz_input", 0.5);
+    pf.cutoff_hz_out = dp("filter/cutoff_hz_output", 0.1);
   }
 
   // debug info
-  params_.is_showing_debug_info =
-      declare_parameter<bool>("is_showing_debug_info", true);
-  const std::string name = declare_parameter<std::string>("name", "");
-  debugger_ = std::make_unique<Debugger>(this, name);
+  auto &pde = params_.debug;
+  {
+    pde.is_showing_debug_info = dp("is_showing_debug_info", true);
+    pde.name = dp("name", "delay_time");
+    debugger_ = std::make_unique<Debugger>(this, pde.name);
+  }
+
+  // input subscriber
+  {
+    const std::string type_name = declare_parameter<std::string>("input_type");
+    const std::string access = declare_parameter<std::string>("input_access");
+    const std::string topic = declare_parameter<std::string>("input_topic");
+    type_name_input_ = std::make_shared<GenericMessage>(type_name);
+    access_input_ = type_name_input_->GetAccess(access);
+    const auto callback =
+        [this](const std::shared_ptr<rclcpp::SerializedMessage> serialized) {
+          const auto yaml = type_name_input_->ConvertYAML(*serialized);
+          const auto node = access_input_->Access(yaml);
+          input_value_ = node.as<float>();
+        };
+    sub_input_ =
+        create_generic_subscription(topic, type_name, rclcpp::QoS(1), callback);
+  }
+
+  // response subscriber
+  {
+    const std::string type_name =
+        declare_parameter<std::string>("response_type");
+    const std::string access =
+        declare_parameter<std::string>("response_access");
+    const std::string topic = declare_parameter<std::string>("response_topic");
+    type_name_response_ = std::make_shared<GenericMessage>(type_name);
+    access_response_ = type_name_response_->GetAccess(access);
+    const auto callback =
+        [this](const std::shared_ptr<rclcpp::SerializedMessage> serialized) {
+          const auto yaml = type_name_response_->ConvertYAML(*serialized);
+          const auto node = access_response_->Access(yaml);
+          response_value_ = node.as<float>();
+        };
+    sub_response_ =
+        create_generic_subscription(topic, type_name, rclcpp::QoS(1), callback);
+  }
 
   // estimation callback
   {
@@ -109,6 +148,8 @@ DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
 }
 
 void DelayEstimatorNode::estimateDelay() {
+  if (!input_value_ || !response_value_)
+    return;
   delay_estimator_->estimate(params_, input_value_, response_value_, debugger_);
 }
 

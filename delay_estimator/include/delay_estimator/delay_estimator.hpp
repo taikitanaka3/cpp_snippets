@@ -15,6 +15,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/float64.hpp"
 #include "std_msgs/msg/float64_multi_array.hpp"
+#include <generic_type_support/generic_type_support.hpp>
 
 using namespace data_processor;
 
@@ -36,15 +37,13 @@ public:
   EstimationResult estimate(const Params &params, const double input,
                             const double response,
                             std::unique_ptr<Debugger> &debugger);
-  DelayEstimator(rclcpp::Node *node, const Params &params,
-                 const std::string &name);
-  DelayEstimator(rclcpp::Node *node, const std::string &name);
+  DelayEstimator(const std::string &name);
   double getDelayTime();
-
-  std::unique_ptr<Debugger> debugger_;
 };
 
 using std_msgs::msg::Float64;
+using GenericMessage = generic_type_support::GenericMessage;
+using GenericAccess = generic_type_support::GenericMessage::GenericAccess;
 
 class DelayEstimatorNode : public rclcpp::Node {
 private:
@@ -52,8 +51,14 @@ private:
   rclcpp::Subscription<Float64>::SharedPtr sub_command_ptr_;
   rclcpp::Subscription<Float64>::SharedPtr sub_status_ptr_;
 
-  // publication
-  rclcpp::Publisher<Float64>::SharedPtr pub_estimated_;
+  // input
+  std::shared_ptr<GenericMessage> type_name_input_;
+  std::shared_ptr<GenericAccess> access_input_;
+  rclcpp::GenericSubscription::SharedPtr sub_input_;
+  // response
+  std::shared_ptr<GenericMessage> type_name_response_;
+  std::shared_ptr<GenericAccess> access_response_;
+  rclcpp::GenericSubscription::SharedPtr sub_response_;
 
   // Timer
   rclcpp::TimerBase::SharedPtr timer_;

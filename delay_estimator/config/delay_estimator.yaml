@@ -1,12 +1,13 @@
 delay_estimator:
   ros__parameters:
-    name: "sample"
-    is_showing_debug_info: true # set false to test at pubic road
+    debug:
+      name: "sample"
+      is_showing_debug_info: true # set false to test at pubic road
     thresh:
-      #valid_min_value:
-      #valid_min_value:
+      valid_min_value: -100.0
+      valid_max_value: 100.0
       validation_data_stddev: 0.2
-      valid_peak_cross_correlation: 0.8
+      valid_cross_correlation: 0.8
       valid_delay_index_ratio: 0.1
     data:
       sampling_hz: 30.0 # data sampling hz

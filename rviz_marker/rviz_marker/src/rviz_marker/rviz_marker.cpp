@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <rviz_marker/rviz_marker.hpp>
 
+/*
 MarkerArray createPathMarkerArray(const PathWithLaneId &path,
                                   const std::string &ns, const double r,
                                   const double g, const double b) {
@@ -25,5 +26,5 @@ MarkerArray createPathMarkerArray(const PathWithLaneId &path,
   }
   return msg;
 }
-
+*/
 int main() { return 0; }

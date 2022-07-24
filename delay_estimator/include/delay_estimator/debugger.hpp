@@ -38,7 +38,7 @@ public:
 
   Debugger(rclcpp::Node *node, const std::string &name) {
     pub_debug_ = node->create_publisher<Float64MultiArray>(
-        "~/debug_values/" + name, rclcpp::QoS{1});
+        "~/debug_values/delay_sec/" + name, rclcpp::QoS{1});
     debug_values_.data.resize(num_debug_values_, 0.0);
   }
 

@@ -1,0 +1,10 @@
+repositories:
+  # external repos
+  multidata_monitor:
+    type: git
+    url: git@github.com:tier4/multi_data_monitor.git
+    version: feature/beta-release-candidate
+  autoware_auto_msgss:
+    type: git
+    url: git@github.com:tier4/autoware_auto_msgs.git
+    version: tier4/main

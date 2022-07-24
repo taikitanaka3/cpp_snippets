@@ -1,7 +1,18 @@
 <launch>
-  <arg name="delay_estimator_param" default="$(find-pkg-share delay_estimator)/config/delay_estimator.yaml"/>
   <!--  delay estimator -->
-  <node pkg="delay_estimator" exec="delay_estimator" name="delay_estimator" output="screen" respawn="true">
-    <param from="$(var delay_estimator_param)"/>
-  </node>
+  <arg name="delay_estimator_param" default="$(find-pkg-share delay_estimator)/config/delay_estimator.yaml"/>
+  <group>
+    <push-ros-namespace namespace="calibration"/>
+    <node pkg="delay_estimator" exec="delay_estimator" name="delay_estimator" output="screen" respawn="true">
+      <param from="$(var delay_estimator_param)"/>
+      <!--input topic info-->
+      <param name="input_type" value="std_msgs/msg/Header"/>
+      <param name="input_access" value="stamp.sec"/>
+      <param name="input_topic" value="/input"/>
+      <!--response topic info-->
+      <param name="response_type" value="std_msgs/msg/Header"/>
+      <param name="response_access" value="stamp.sec"/>
+      <param name="response_topic" value="/response"/>
+    </node>
+  </group>
 </launch>

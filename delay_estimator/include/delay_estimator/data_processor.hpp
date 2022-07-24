@@ -19,9 +19,9 @@ struct Params {
   struct Threshold {
     double valid_min_value;
     double valid_max_value;
-    double validation_data_stddev;       // [-]
-    double valid_peak_cross_correlation; // [-]
-    double valid_delay_index_ratio;      // [-]
+    double validation_data_stddev;  // [-]
+    double valid_cross_correlation; // [-]
+    double valid_delay_index_ratio; // [-]
   };
   struct DataSize {
     size_t total_data;
@@ -36,10 +36,14 @@ struct Params {
     double cutoff_hz_out;
     bool use_lowpass_filter;
   };
+  struct Debug {
+    bool is_showing_debug_info;
+    std::string name;
+  };
   Threshold thresh;
   DataSize data;
   Filter filter;
-  bool is_showing_debug_info;
+  Debug debug;
 };
 
 struct Data {
@@ -166,19 +170,32 @@ inline UpdateResult updateData(const Params &params, const double input,
                                const double response, Data &input_data_list,
                                Data &response_data_list) {
   double max_stddev = 0;
+  bool is_valid_stddev = false;
+  bool is_valid_input = false;
+  bool is_valid_response = false;
+
   {
+    const auto &pt = params.thresh;
+    // is valid data
+    is_valid_input =
+        (pt.valid_min_value <= input && input <= pt.valid_min_value);
+    is_valid_response =
+        (pt.valid_min_value <= response && response <= pt.valid_min_value);
+
+    // is valid stddev
     input_data_list.validation.emplace_back(input);
     response_data_list.validation.emplace_back(response);
     const double input_stddev = getStddevFromVector(input_data_list.validation);
     const double response_stddev =
         getStddevFromVector(response_data_list.validation);
     max_stddev = std::max(input_stddev, response_stddev);
+    is_valid_stddev = (max_stddev > params.thresh.validation_data_stddev);
     if (input_data_list.validation.size() >= params.data.validation_data) {
       input_data_list.validation.pop_front();
       response_data_list.validation.pop_front();
     }
   }
-  if (max_stddev < params.thresh.validation_data_stddev) {
+  if (!is_valid_stddev || !is_valid_input || !is_valid_response) {
     // continue processing if current data has low stddev
     return UpdateResult::SKIP;
   } else {
