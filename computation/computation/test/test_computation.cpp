@@ -34,6 +34,21 @@ void test_hypot() {
   }
 }
 
+TEST(perf, order) {
+  const double a = 2;
+  const double b = 3;
+  const bool c = a < b + 1;
+  std::cout << c << std::endl;
+}
+
+TEST(perf, numelic_limits) {
+  const double a = std::numeric_limits<double>::max();
+  const double b = std::numeric_limits<double>::max();
+  const double c = a * b;
+  std::cout << a << std::endl;
+  std::cout << c << std::endl;
+}
+
 TEST(test, test_hypot_) { test_hypot(); }
 
 TEST(perf, hypot_increment_none_const) {
