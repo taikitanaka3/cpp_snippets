@@ -26,7 +26,7 @@ PKG=multi_thread_practice
 #PKG=lanelet2_extension
 #PKG=interpolation
 #PKG=window_recorder
-#PKG=rviz_marker
+PKG=rviz_marker
 #PKG=delay_estimator
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
