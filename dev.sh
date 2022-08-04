@@ -30,7 +30,7 @@ PKG=rviz_marker
 #PKG=delay_estimator
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
-#PKG=boost_reference
+PKG=interp
 
 #PKG=path_smoother
 case $1 in

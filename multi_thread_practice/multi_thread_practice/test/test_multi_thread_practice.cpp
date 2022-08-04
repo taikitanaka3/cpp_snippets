@@ -102,27 +102,27 @@ TEST(test, conflict) {
 }
 
 TEST(test, invalid_access) {
-  std::vector<int> x={99};
+  std::vector<int> x = {99};
   std::mutex mtx;
 
   std::thread t1([&x, &mtx] {
     for (size_t i = 0; i < 1000; i++) {
       std::lock_guard<std::mutex> lock(mtx);
       x.emplace_back(1);
-      std::cout<<"a1";
+      std::cout << "a1";
     }
   });
   std::thread t2([&x, &mtx] {
     for (size_t i = 0; i < 1000; i++) {
       std::lock_guard<std::mutex> lock(mtx);
-      std::cout<<"a2";
+      std::cout << "a2";
       x.emplace_back(2);
     }
   });
   std::thread t3([&x, &mtx] {
     for (size_t i = 0; i < 10000; i++) {
       std::lock_guard<std::mutex> lock(mtx);
-      std::cout<<"c";
+      std::cout << "c";
       x.clear();
     }
   });

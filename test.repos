@@ -3,8 +3,25 @@ repositories:
   multidata_monitor:
     type: git
     url: git@github.com:tier4/multi_data_monitor.git
-    version: feature/beta-release-candidate
-  autoware_auto_msgss:
+    version: main
+  autoware_auto_msgs:
     type: git
     url: git@github.com:tier4/autoware_auto_msgs.git
     version: tier4/main
+  autoware:
+    type: git
+    url: git@github.com:autowarefoundation/autoware.universe.git
+    version: main
+  autoware_common:
+    type: git
+    url: https://github.com/autowarefoundation/autoware_common.git
+    version: main
+  autoware_msgs:
+    type: git
+    url: https://github.com/autowarefoundation/autoware_msgs.git
+    version: main
+  # universe
+  tier4_autoware_msgs:
+    type: git
+    url: https://github.com/tier4/tier4_autoware_msgs.git
+    version: tier4/universe
