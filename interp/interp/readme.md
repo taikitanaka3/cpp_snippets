@@ -1,4 +1,5 @@
-: [ RUN      ] almost_same_point.spline_linear_cmp
+: [ RUN ] almost_same_point.spline_linear_cmp
+
 ```
 TEST(almost_same_point, spline_linear_cmp) {
   // case Too narrow
@@ -15,7 +16,7 @@ TEST(nominal, spline_linear_cmp) {
 }
 ```
 
-``` test
+```test
 1: [----------] 1 test from almost_same_point
 1: [ RUN      ] almost_same_point.spline_linear_cmp
 1: s key : 0 s val : 0
@@ -23,7 +24,7 @@ TEST(nominal, spline_linear_cmp) {
 1: s key : 1 s val : 0
 1: l key : 1 l val : 0
 1: s key : 1.5 s val : 137.592
-1: l key : 1.5 l val : 0.1           
+1: l key : 1.5 l val : 0.1
 1: s key : 2 s val : 0.1
 1: l key : 2 l val : 0.1
 1: s key : 3 s val : 0.1
@@ -45,7 +46,7 @@ TEST(nominal, spline_linear_cmp) {
 1: l key : 4 l val : 0.1
 1: [       OK ] almost_same_point.spline_linear_cmp (0 ms)
 1: [----------] 1 test from almost_same_point (0 ms total)
-1: 
+1:
 1: [----------] 1 test from nominal
 1: [ RUN      ] nominal.spline_linear_cmp
 1: s key : 0 s val : 0

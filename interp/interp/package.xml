@@ -7,6 +7,8 @@
   <license>Apache License 2.0</license>
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
   <depend>interpolation</depend>
+  <depend>tier4_autoware_utils</depend>
+  <depend>tier4_planning_rviz_plugin</depend>
   <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <export>

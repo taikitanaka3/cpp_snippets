@@ -13,6 +13,11 @@ ament_auto_find_build_dependencies()
 ament_auto_add_library(interp SHARED
   src/interp/interp.cpp
 )
+
+ament_auto_add_executable(interp_node
+  src/interp/interp.cpp
+)
+
 target_include_directories(interp
   SYSTEM PUBLIC
     ${tf2_geometry_msgs_INCLUDE_DIRS}
