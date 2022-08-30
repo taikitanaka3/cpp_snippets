@@ -1,7 +1,6 @@
 re resample trajectory example
 ![image](re_resample.png)
 
-
 : [ RUN ] almost_same_point.spline_linear_cmp
 
 ```

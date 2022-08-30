@@ -6,6 +6,40 @@ using namespace std::chrono;
 
 inline double myhypot(double a, double b) { return a * a + b * b; }
 
+TEST(vector, val) {
+  std::vector<int> c(10);
+  std::cerr << "vec" << std::endl;
+  for (const auto i : c) {
+    std::cerr << i << std::endl;
+  }
+}
+
+TEST(how, SET) {
+  std::set<int> c;
+
+  c.insert(1);
+  c.insert(4);
+  c.insert(3);
+  c.insert(1);
+
+  for (const auto i : c) {
+    std::cerr << i << std::endl;
+  }
+}
+
+TEST(how, unordered_set) {
+  std::unordered_set<int> c;
+
+  c.insert(1);
+  c.insert(4);
+  c.insert(3);
+  c.insert(1);
+
+  for (const auto i : c) {
+    std::cerr << i << std::endl;
+  }
+}
+
 void test_hypot() {
   size_t N = 1000000000;
 

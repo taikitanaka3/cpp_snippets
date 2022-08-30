@@ -20,17 +20,17 @@ PKG=gtest_practice
 PKG=multi_thread_practice
 #PKG=multi_polygon_practice
 #PKG=cv_practice
-#PKG=computation
-#PKG=lowpass
+PKG=computation
+PKG=boost_reference
 #PKG=behavior_path_planner
 #PKG=lanelet2_extension
 #PKG=interpolation
 #PKG=window_recorder
-PKG=rviz_marker
+#PKG=rviz_marker
 #PKG=delay_estimator
 #PKG=groot
 #--packages-up-to-regex .*path_distance.*
-PKG=interp
+#PKG=interp
 
 #PKG=path_smoother
 case $1 in

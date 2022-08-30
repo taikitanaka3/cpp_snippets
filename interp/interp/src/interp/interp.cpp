@@ -6,8 +6,8 @@
 #include <memory>
 #include <string>
 
-#include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/pose.hpp"
+#include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include <autoware_auto_planning_msgs/msg/trajectory.hpp>
 #include <motion_utils/resample/resample.hpp>
@@ -23,8 +23,10 @@ class MinimalPublisher : public rclcpp::Node {
 public:
   MinimalPublisher() : Node("minimal_publisher"), count_(0) {
     pub_traj_ = this->create_publisher<Trajectory>("trajectory", 10);
-    pub_resampled_traj_ = this->create_publisher<Trajectory>("trajectory_resampled", 10);
-    pub_re_resampled_traj_ = this->create_publisher<Trajectory>("trajectory_re_resampled", 10);
+    pub_resampled_traj_ =
+        this->create_publisher<Trajectory>("trajectory_resampled", 10);
+    pub_re_resampled_traj_ =
+        this->create_publisher<Trajectory>("trajectory_re_resampled", 10);
 
     timer_ = this->create_wall_timer(
         500ms, std::bind(&MinimalPublisher::timer_callback, this));
@@ -38,22 +40,23 @@ private:
     for (int i = 0; i < 3; i++) {
       TrajectoryPoint tp;
       tp.pose.position.x = i;
-      tp.pose.position.y = 2*sin(M_PI*i/2);
+      tp.pose.position.y = 2 * sin(M_PI * i / 2);
       traj.points.emplace_back(tp);
     }
 
-    Trajectory resampled_traj = motion_utils::resampleTrajectory(traj,0.5);
-    const auto new_pose = motion_utils::calcLongitudinalOffsetPose(resampled_traj.points,traj.points.front().pose.position,0.0001);
+    Trajectory resampled_traj = motion_utils::resampleTrajectory(traj, 0.5);
+    const auto new_pose = motion_utils::calcLongitudinalOffsetPose(
+        resampled_traj.points, traj.points.front().pose.position, 0.0001);
     auto p = *new_pose;
     size_t idx = 0;
-    motion_utils::insertTargetPoint(idx, p.position,resampled_traj.points);
-    Trajectory re_resampled_traj = motion_utils::resampleTrajectory(resampled_traj,0.5);
-    motion_utils::insertOrientation(resampled_traj.points,true);
+    motion_utils::insertTargetPoint(idx, p.position, resampled_traj.points);
+    Trajectory re_resampled_traj =
+        motion_utils::resampleTrajectory(resampled_traj, 0.5);
+    motion_utils::insertOrientation(resampled_traj.points, true);
     pub_traj_->publish(traj);
     pub_resampled_traj_->publish(resampled_traj);
     pub_re_resampled_traj_->publish(re_resampled_traj);
   }
-
 
   rclcpp::TimerBase::SharedPtr timer_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_traj_;
