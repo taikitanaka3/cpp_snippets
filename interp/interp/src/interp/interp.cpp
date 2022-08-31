@@ -24,21 +24,24 @@ class MinimalPublisher : public rclcpp::Node {
 public:
   // main
   MinimalPublisher() : Node("minimal_publisher"), count_(0) {
-    pub_pose_ = this->create_publisher<PoseStamped>("inserted_pose", 10);
-    pub_traj_ = this->create_publisher<Trajectory>("trajectory", 10);
+    pub_pose_ = this->create_publisher<PoseStamped>("inserted_pose", 1);
+    pub_traj_ = this->create_publisher<Trajectory>("trajectory", 1);
     pub_resampled_traj_ =
-        this->create_publisher<Trajectory>("trajectory_resampled", 10);
+        this->create_publisher<Trajectory>("trajectory_resampled", 1);
     pub_re_resampled_traj_ =
-        this->create_publisher<Trajectory>("trajectory_re_resampled", 10);
+        this->create_publisher<Trajectory>("trajectory_re_resampled", 1);
+    pub_resampled_inserted_original_traj_ = this->create_publisher<Trajectory>(
+        "resampled_inserted_original_traj", 1);
 
-    resample_based_insert_dist_s = declare_parameter("resample_based_insert_dist_s", 0.1);
+    resample_based_insert_dist_s =
+        declare_parameter("resample_based_insert_dist_s", 0.1);
     resample_interval = declare_parameter("resample_interval", 0.5);
     // set parameter callback
     set_param_res_ = this->add_on_set_parameters_callback(
         std::bind(&MinimalPublisher::paramCallback, this, _1));
 
     timer_ = this->create_wall_timer(
-        500ms, std::bind(&MinimalPublisher::timerCallback, this));
+        5ms, std::bind(&MinimalPublisher::timerCallback, this));
   };
 
 private:
@@ -50,31 +53,58 @@ private:
     traj.header.stamp = rclcpp::Clock().now();
     pose_stamped.header.frame_id = "map";
     pose_stamped.header.stamp = rclcpp::Clock().now();
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
       TrajectoryPoint tp;
-      tp.pose.position.x = i;
-      tp.pose.position.y = 2 * sin(M_PI * i / 2);
+      tp.pose.position.x = 5 * cos(M_PI * i / 4);
+      tp.pose.position.y = 5 * sin(M_PI * i / 4);
       traj.points.emplace_back(tp);
     }
+    motion_utils::insertOrientation(traj.points, true);
+    // publish original
+    { pub_traj_->publish(traj); }
+    const double behavior_velocity_resample_interval = 1.0;
+    {
+      // resampled original
+      Trajectory resampled_traj = motion_utils::resampleTrajectory(
+          traj, behavior_velocity_resample_interval);
+      pub_resampled_traj_->publish(resampled_traj);
+    }
 
-    Trajectory resampled_traj = motion_utils::resampleTrajectory(traj, resample_interval);
-    const auto new_pose = motion_utils::calcLongitudinalOffsetPose(
-        resampled_traj.points, traj.points.front().pose.position,
-        resample_based_insert_dist_s);
-    auto p = *new_pose;
-    size_t idx = 0;
-    auto inserted_pose_idx = motion_utils::insertTargetPoint(idx, p.position, resampled_traj.points);
-    if(!inserted_pose_idx) return;
-    Trajectory re_resampled_traj =
-        motion_utils::resampleTrajectory(resampled_traj, resample_interval);
-    motion_utils::insertOrientation(resampled_traj.points, true);
+    // inserted
+    {
+      Trajectory resampled_traj =
+          motion_utils::resampleTrajectory(traj, resample_interval);
+      const auto new_pose = motion_utils::calcLongitudinalOffsetPose(
+          resampled_traj.points, traj.points.front().pose.position,
+          resample_based_insert_dist_s);
+      if (!new_pose) {
+        // if over last point back to original point
+        resample_based_insert_dist_s = 0;
+        return;
+      }
+      const auto p = new_pose.get().position;
+      const size_t base_idx =
+          motion_utils::findNearestSegmentIndex(traj.points, p);
+      auto original_inserted_pose_idx =
+          motion_utils::insertTargetPoint(base_idx, p, traj.points);
+      if (!original_inserted_pose_idx)
+        return;
+      Trajectory original_resampled_traj = motion_utils::resampleTrajectory(
+          traj, behavior_velocity_resample_interval);
+      motion_utils::insertOrientation(original_resampled_traj.points, true);
+      pub_resampled_inserted_original_traj_->publish(original_resampled_traj);
+      pose_stamped.pose = traj.points.at(original_inserted_pose_idx.get()).pose;
+      pub_pose_->publish(pose_stamped);
+    }
 
-    pose_stamped.pose = resampled_traj.points.at(inserted_pose_idx.get()).pose;
-    // publish
-    pub_pose_->publish(pose_stamped);
-    pub_traj_->publish(traj);
-    pub_resampled_traj_->publish(resampled_traj);
-    pub_re_resampled_traj_->publish(re_resampled_traj);
+    // test re-resampled original
+    {
+      Trajectory re_resampled_original_traj =
+          motion_utils::resampleTrajectory(traj, resample_interval);
+      pub_re_resampled_traj_->publish(re_resampled_original_traj);
+    }
+    // increment s little by little
+    resample_based_insert_dist_s += 0.001;
   };
 
   rcl_interfaces::msg::SetParametersResult
@@ -82,7 +112,8 @@ private:
     using tier4_autoware_utils::updateParam;
 
     { // option parameter
-      updateParam<double>(parameters, "resample_based_insert_dist_s", resample_based_insert_dist_s);
+      updateParam<double>(parameters, "resample_based_insert_dist_s",
+                          resample_based_insert_dist_s);
       updateParam<double>(parameters, "resample_interval", resample_interval);
     }
     rcl_interfaces::msg::SetParametersResult result{};
@@ -97,6 +128,8 @@ private:
   rclcpp::Publisher<PoseStamped>::SharedPtr pub_pose_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_traj_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_resampled_traj_;
+  rclcpp::Publisher<Trajectory>::SharedPtr
+      pub_resampled_inserted_original_traj_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_re_resampled_traj_;
   size_t count_;
   double resample_based_insert_dist_s;

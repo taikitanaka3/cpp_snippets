@@ -8,7 +8,7 @@ open rviz `rviz -d rviz2 -r interp/interp/config/interpolation.rviz`
 
 run reconfigure `ros2 run rqt_reconfigure rqt_reconfigure`
 
-[how it looks like ](./interpolation.mp4)
+![how it looks like](./interpolation_with_insert_point_all_search.mp4)
 
 re resample trajectory example
 ![image](re_resample.png)
