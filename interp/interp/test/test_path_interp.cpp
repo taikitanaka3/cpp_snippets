@@ -1,4 +1,4 @@
-#include <autoware_auto_planning_msgs/msg/PathWithLaneId.hpp>
+// #include <autoware_auto_planning_msgs/msg/PathWithLaneId.hpp>
 #include <bits/stdc++.h>
 #include <gtest/gtest.h>
 #include <interp/interp.hpp>

@@ -1,3 +1,15 @@
+# interpolation test
+
+[setup](./../README.md)
+
+run `ros2 run interp interp_node`
+
+open rviz `rviz -d rviz2 -r interp/interp/config/interpolation.rviz`
+
+run reconfigure `ros2 run rqt_reconfigure rqt_reconfigure`
+
+[how it looks like ](./interpolation.mp4)
+
 re resample trajectory example
 ![image](re_resample.png)
 
