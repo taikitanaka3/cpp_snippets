@@ -47,6 +47,8 @@ public:
 private:
   // call back
   void timerCallback() {
+    // increment insert point s little by little
+    resample_based_insert_dist_s += 0.001;
     Trajectory traj;
     PoseStamped pose_stamped;
     traj.header.frame_id = "map";
@@ -83,6 +85,12 @@ private:
         return;
       }
       const auto p = new_pose.get().position;
+       const size_t closest_index = motion_utils::findNearestIndex(traj.points, p); 
+       auto close_p = traj.points.at(closest_index).pose.position;
+      const double distance_between_points = tier4_autoware_utils::calcDistance2d(p,close_p); 
+      if(distance_between_points < 0.1){
+        std::cerr<<"warn, distance between points: "<<distance_between_points<<std::endl;
+      }
       const size_t base_idx =
           motion_utils::findNearestSegmentIndex(traj.points, p);
       auto original_inserted_pose_idx =
@@ -95,16 +103,14 @@ private:
       pub_resampled_inserted_original_traj_->publish(original_resampled_traj);
       pose_stamped.pose = traj.points.at(original_inserted_pose_idx.get()).pose;
       pub_pose_->publish(pose_stamped);
+      // test re-resampled original
+      {
+        Trajectory re_resampled_original_traj =
+            motion_utils::resampleTrajectory(original_resampled_traj,
+                                             resample_interval);
+        pub_re_resampled_traj_->publish(re_resampled_original_traj);
+      }
     }
-
-    // test re-resampled original
-    {
-      Trajectory re_resampled_original_traj =
-          motion_utils::resampleTrajectory(traj, resample_interval);
-      pub_re_resampled_traj_->publish(re_resampled_original_traj);
-    }
-    // increment s little by little
-    resample_based_insert_dist_s += 0.001;
   };
 
   rcl_interfaces::msg::SetParametersResult
