@@ -9,7 +9,7 @@ TEST(arclength, lane_id) {
   std::vector<double> base_vals = {0.0, 0.0, 0.1, 0.1, 0.1, 0.1};
   std::vector<double> query_keys = {0.0, 1.0, 1.5, 2.0, 3.0, 4.0};
   std::vector<double> s_query_vals =
-      ::interpolation::slerp(base_keys, base_vals, query_keys);
+      ::interpolation::spline(base_keys, base_vals, query_keys);
   std::vector<double> l_query_vals =
       ::interpolation::lerp(base_keys, base_vals, query_keys);
   for (size_t i = 0; i < query_keys.size(); i++) {
@@ -22,7 +22,7 @@ TEST(arclength, lane_id) {
   // case narrow
   std::cout << "case easier" << std::endl;
   base_keys = {0.0, 1.0, 1.001, 2.0, 3.0, 4.0};
-  s_query_vals = ::interpolation::slerp(base_keys, base_vals, query_keys);
+  s_query_vals = ::interpolation::spline(base_keys, base_vals, query_keys);
   l_query_vals = ::interpolation::lerp(base_keys, base_vals, query_keys);
   for (size_t i = 0; i < query_keys.size(); i++) {
     std::cout << "s key : " << query_keys.at(i)

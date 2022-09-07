@@ -30,6 +30,8 @@ public:
         this->create_publisher<Trajectory>("trajectory_resampled", 1);
     pub_re_resampled_traj_ =
         this->create_publisher<Trajectory>("trajectory_re_resampled", 1);
+    pub_inserted_original_traj_ =
+        this->create_publisher<Trajectory>("inserted_original_traj", 1);
     pub_resampled_inserted_original_traj_ = this->create_publisher<Trajectory>(
         "resampled_inserted_original_traj", 1);
 
@@ -85,11 +87,14 @@ private:
         return;
       }
       const auto p = new_pose.get().position;
-       const size_t closest_index = motion_utils::findNearestIndex(traj.points, p); 
-       auto close_p = traj.points.at(closest_index).pose.position;
-      const double distance_between_points = tier4_autoware_utils::calcDistance2d(p,close_p); 
-      if(distance_between_points < 0.1){
-        std::cerr<<"warn, distance between points: "<<distance_between_points<<std::endl;
+      const size_t closest_index =
+          motion_utils::findNearestIndex(traj.points, p);
+      auto close_p = traj.points.at(closest_index).pose.position;
+      const double distance_between_points =
+          tier4_autoware_utils::calcDistance2d(p, close_p);
+      if (distance_between_points < 0.1) {
+        std::cerr << "warn, distance between points: "
+                  << distance_between_points << std::endl;
       }
       const size_t base_idx =
           motion_utils::findNearestSegmentIndex(traj.points, p);
@@ -97,6 +102,7 @@ private:
           motion_utils::insertTargetPoint(base_idx, p, traj.points);
       if (!original_inserted_pose_idx)
         return;
+      pub_inserted_original_traj_->publish(traj);
       Trajectory original_resampled_traj = motion_utils::resampleTrajectory(
           traj, behavior_velocity_resample_interval);
       motion_utils::insertOrientation(original_resampled_traj.points, true);
@@ -134,6 +140,7 @@ private:
   rclcpp::Publisher<PoseStamped>::SharedPtr pub_pose_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_traj_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_resampled_traj_;
+  rclcpp::Publisher<Trajectory>::SharedPtr pub_inserted_original_traj_;
   rclcpp::Publisher<Trajectory>::SharedPtr
       pub_resampled_inserted_original_traj_;
   rclcpp::Publisher<Trajectory>::SharedPtr pub_re_resampled_traj_;
