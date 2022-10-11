@@ -16,13 +16,16 @@ ament_auto_add_executable(delay_estimator
 ament_target_dependencies(delay_estimator)
 
 # Test
-#if(BUILD_TESTING)
-#  find_package(ament_lint_auto REQUIRED)
-#  ament_lint_auto_find_test_dependencies()
-#  find_package(ament_cmake_gtest REQUIRED)
-#  file(GLOB_RECURSE test_files test/*.cpp)
-#  ament_add_gtest(test_delay_estimator ${test_files})
-#endif()
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_gtest REQUIRED)
+  file(GLOB_RECURSE test_files test/*.cpp)
+  ament_add_gtest(test_delay_estimator ${test_files})
+  include_directories(
+    include
+  )
+endif()
 
 ament_auto_package(INSTALL_TO_SHARE
   launch

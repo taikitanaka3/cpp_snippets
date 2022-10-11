@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 #include <delay_estimator/data_processor.hpp>
-#include <delay_estimator/delay_estimator.hpp>
 #include <gtest/gtest.h>
 
 TEST(test, Coefficient) {
