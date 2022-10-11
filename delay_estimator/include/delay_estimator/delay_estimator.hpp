@@ -18,6 +18,7 @@
 #include <generic_type_support/generic_type_support.hpp>
 
 using namespace data_processor;
+using namespace generic_type_support;
 
 class DelayEstimator {
 private:
@@ -42,8 +43,6 @@ public:
 };
 
 using std_msgs::msg::Float64;
-using GenericMessage = generic_type_support::GenericMessage;
-using GenericAccess = generic_type_support::GenericMessage::GenericAccess;
 
 class DelayEstimatorNode : public rclcpp::Node {
 private:
@@ -52,12 +51,12 @@ private:
   rclcpp::Subscription<Float64>::SharedPtr sub_status_ptr_;
 
   // input
-  std::shared_ptr<GenericMessage> type_name_input_;
-  std::shared_ptr<GenericAccess> access_input_;
+  std::shared_ptr<GenericMessageSupport> type_name_input_;
+  std::shared_ptr<GenericTypeAccess> access_input_;
   rclcpp::GenericSubscription::SharedPtr sub_input_;
   // response
-  std::shared_ptr<GenericMessage> type_name_response_;
-  std::shared_ptr<GenericAccess> access_response_;
+  std::shared_ptr<GenericMessageSupport> type_name_response_;
+  std::shared_ptr<GenericTypeAccess> access_response_;
   rclcpp::GenericSubscription::SharedPtr sub_response_;
 
   // Timer

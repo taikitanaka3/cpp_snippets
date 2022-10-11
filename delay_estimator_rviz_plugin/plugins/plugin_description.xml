@@ -1,0 +1,9 @@
+<library path="delay_estimator_rviz_plugin">
+
+  <class
+    type="DelayEstimatorPanel"
+    base_class_type="rviz_common::Panel">
+    <description>DelayEstimatorPanel</description>
+  </class>
+
+</library>
