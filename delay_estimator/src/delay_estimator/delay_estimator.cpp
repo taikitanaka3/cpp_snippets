@@ -5,15 +5,19 @@ EstimationResult DelayEstimator::estimate(const Params &params,
                                           const double input,
                                           const double response,
                                           std::unique_ptr<Debugger> &debugger) {
+      std::cerr<<__LINE__<<std::endl;
   smoothed_input_ =
       lowpassFilter(input, smoothed_input_, params.filter.cutoff_hz_in,
                     params.data.sampling_hz);
   smoothed_response_ =
       lowpassFilter(response, smoothed_response_, params.filter.cutoff_hz_in,
                     params.data.sampling_hz);
+                          std::cerr<<__LINE__<<std::endl;
   update_result_ = updateData(params, smoothed_input_, smoothed_response_,
                               input_, response_);
+                                    std::cerr<<__LINE__<<std::endl;
   if (update_result_ = UpdateResult::QUEQUE) {
+          std::cerr<<__LINE__<<std::endl;
     const auto &pd = params.data;
     const auto &pt = params.thresh;
     const size_t valid_max_delay_index =
@@ -32,6 +36,7 @@ EstimationResult DelayEstimator::estimate(const Params &params,
         lowpassFilter(delay_time, staticstic_.p_value,
                       params.filter.cutoff_hz_out, params.data.sampling_hz);
     staticstic_.calcSequentialStddev(fitlered_value);
+          std::cerr<<__LINE__<<std::endl;
     // set debug values
     {
       using DBG = Debugger::DBGVAL;
@@ -48,6 +53,7 @@ EstimationResult DelayEstimator::estimate(const Params &params,
       debugger->publishDebugValue();
     }
     return SUCCESS;
+          std::cerr<<__LINE__<<std::endl;
   }
   return NONE;
 }
@@ -102,17 +108,17 @@ DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
     const std::string access = declare_parameter<std::string>("input_access");
     const std::string topic = declare_parameter<std::string>("input_topic");
     type_name_input_ = std::make_shared<GenericMessage>(type_name);
-    access_input_ = type_name_input_->GetAccess(access);
+    access_input_ = std::make_shared<GenericAccess>(access);
     const auto callback =
         [this](const std::shared_ptr<rclcpp::SerializedMessage> serialized) {
-          const auto yaml = type_name_input_->ConvertYAML(*serialized);
-          const auto node = access_input_->Access(yaml);
+          const auto yaml = type_name_input_->DeserializeYAML(*serialized);
+          const auto node = access_input_->Get(yaml);
           input_value_ = node.as<float>();
         };
     sub_input_ =
         create_generic_subscription(topic, type_name, rclcpp::QoS(1), callback);
   }
-
+  std::cerr<<__LINE__<<std::endl;
   // response subscriber
   {
     const std::string type_name =
@@ -121,17 +127,17 @@ DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
         declare_parameter<std::string>("response_access");
     const std::string topic = declare_parameter<std::string>("response_topic");
     type_name_response_ = std::make_shared<GenericMessage>(type_name);
-    access_response_ = type_name_response_->GetAccess(access);
+    access_response_ = std::make_shared<GenericAccess>(access);
     const auto callback =
         [this](const std::shared_ptr<rclcpp::SerializedMessage> serialized) {
-          const auto yaml = type_name_response_->ConvertYAML(*serialized);
-          const auto node = access_response_->Access(yaml);
+          const auto yaml = type_name_response_->DeserializeYAML(*serialized);
+          const auto node = access_response_->Get(yaml);
           response_value_ = node.as<float>();
         };
     sub_response_ =
         create_generic_subscription(topic, type_name, rclcpp::QoS(1), callback);
   }
-
+  std::cerr<<__LINE__<<std::endl;
   // estimation callback
   {
     const auto period_s = 1.0 / params_.data.estimation_hz;
@@ -145,11 +151,19 @@ DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
             this->get_node_base_interface()->get_context());
     this->get_node_timers_interface()->add_timer(timer_, nullptr);
   }
+  std::cerr<<__LINE__<<std::endl;
 }
 
 void DelayEstimatorNode::estimateDelay() {
-  if (!input_value_ || !response_value_)
+  std::cerr<<__LINE__<<std::endl;
+  if (!input_value_){
+      std::cerr<<__LINE__<<std::endl;
     return;
+  } else if(!response_value_){
+    std::cerr<<__LINE__<<std::endl;    
+    return;
+  }
+  std::cerr<<__LINE__<<std::endl;
   delay_estimator_->estimate(params_, input_value_, response_value_, debugger_);
 }
 

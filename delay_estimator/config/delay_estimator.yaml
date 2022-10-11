@@ -1,7 +1,7 @@
-delay_estimator:
+/**:
   ros__parameters:
     debug:
-      name: "sample"
+      name: "steer"
       is_showing_debug_info: true # set false to test at pubic road
     thresh:
       valid_min_value: -100.0
