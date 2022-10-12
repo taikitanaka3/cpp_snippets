@@ -5,94 +5,100 @@ EstimationResult DelayEstimator::estimate(const Params &params,
                                           const double input,
                                           const double response,
                                           std::unique_ptr<Debugger> &debugger) {
+  EstimationResult result = NONE;
   smoothed_input_ =
       lowpassFilter(input, smoothed_input_, params.filter.cutoff_hz_in,
                     params.data.sampling_hz);
   smoothed_response_ =
       lowpassFilter(response, smoothed_response_, params.filter.cutoff_hz_in,
                     params.data.sampling_hz);
+  double current_stddev = 0;
   update_result_ = updateData(params, smoothed_input_, smoothed_response_,
-                              input_, response_);
-  if (update_result_ = UpdateResult::QUEQUE) {
+                              input_, response_, current_stddev);
+  double conf = 0;
+  if (update_result_ == UpdateResult::QUEQUE) {
     const auto &pd = params.data;
     const auto &pt = params.thresh;
     const size_t valid_max_delay_index =
-        static_cast<size_t>(pd.total_data * pt.valid_delay_index_ratio);
+        static_cast<size_t>(pd.sampling_data_size * pt.valid_delay_index_ratio);
     const size_t delay_index = getPeakCrossCorrelationCoefficientIndex(
         input_.data, response_.data, weights_, cross_correlation_,
         valid_max_delay_index);
     const double delay_per_index = 1.0 / params.data.sampling_hz;
-    const double conf = cross_correlation_.at(delay_index);
+    conf = cross_correlation_.at(delay_index);
     const double delay_time =
         static_cast<double>(delay_index) * delay_per_index;
     if (conf < params.thresh.valid_cross_correlation) {
-      return EstimationResult::LOWCORRELATION;
+      result = EstimationResult::LOWCORRELATION;
+    } else {
+      const double fitlered_value =
+          lowpassFilter(delay_time, staticstic_.p_value,
+                        params.filter.cutoff_hz_out, params.data.sampling_hz);
+      staticstic_.calcSequentialStddev(fitlered_value);
+      result = SUCCESS;
     }
-    const double fitlered_value =
-        lowpassFilter(delay_time, staticstic_.p_value,
-                      params.filter.cutoff_hz_out, params.data.sampling_hz);
-    staticstic_.calcSequentialStddev(fitlered_value);
-    // set debug values
-    {
-      using DBG = Debugger::DBGVAL;
-      auto &dbgv = debugger->debug_values_;
-      dbgv.data.at(DBG::INPUT_DATA) = input;
-      dbgv.data.at(DBG::INPUT_PROCESSED) = smoothed_input_;
-      dbgv.data.at(DBG::RESPONSE_DATA) = response;
-      dbgv.data.at(DBG::RESPONSE_PROCESSED) = smoothed_response_;
-      dbgv.data.at(DBG::STDDEV_MAX) = update_result_;
-      dbgv.data.at(DBG::DELAY_TIME) = fitlered_value;
-      dbgv.data.at(DBG::DELAY_TIME_RAW) = delay_time;
-      dbgv.data.at(DBG::DELAY_STDDEV) = staticstic_.stddev;
-      dbgv.data.at(DBG::CROSS_CORRELATION_PEAK) = conf;
-      debugger->publishDebugValue();
-    }
-    return SUCCESS;
   }
-  return NONE;
+  // set debug values
+  {
+    using DBG = Debugger::DBGVAL;
+    auto &dbgv = debugger->debug_values_;
+    dbgv.data.at(DBG::INPUT_DATA) = input;
+    dbgv.data.at(DBG::INPUT_PROCESSED) = smoothed_input_;
+    dbgv.data.at(DBG::RESPONSE_DATA) = response;
+    dbgv.data.at(DBG::RESPONSE_PROCESSED) = smoothed_response_;
+    dbgv.data.at(DBG::STDDEV_MAX) = current_stddev;
+    dbgv.data.at(DBG::DELAY_TIME) = staticstic_.mean;
+    dbgv.data.at(DBG::DELAY_TIME_RAW) = staticstic_.p_value;
+    dbgv.data.at(DBG::DELAY_STDDEV) = staticstic_.stddev;
+    dbgv.data.at(DBG::CROSS_CORRELATION_PEAK) = conf;
+    debugger->publishDebugValue();
+  }
+  return result;
 }
 
 DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
     : Node("delay_estimator", node_options) {
   const double inf = std::numeric_limits<double>::max();
-
-  const auto dp = [this](const std::string &str, auto def_val) {
-    std::string name = str;
-    return this->declare_parameter(name, def_val);
-  };
-
   // thresh
   auto &pt = params_.thresh;
   {
-    pt.valid_min_value = dp("thresh/valid_min_value", -inf);
-    pt.valid_max_value = dp("thresh/valid_max_value", inf);
-    pt.validation_data_stddev = dp("thresh/validation_data_stddev", 0.2);
-    pt.valid_cross_correlation = dp("thresh/valid_cross_correlation", 0.8);
-    pt.valid_delay_index_ratio = dp("thresh/valid_delay_index_ratio", 0.1);
+    pt.valid_min_value = declare_parameter<double>("thresh.valid_min_value");
+    pt.valid_max_value = declare_parameter<double>("thresh.valid_max_value");
+    pt.validation_data_stddev =
+        declare_parameter<double>("thresh.validation_data_stddev");
+    pt.valid_cross_correlation =
+        declare_parameter<double>("thresh.valid_cross_correlation");
+    pt.valid_delay_index_ratio =
+        declare_parameter<double>("thresh.valid_delay_index_ratio");
   }
 
   // data size
   auto &pd = params_.data;
   {
-    pd.sampling_hz = dp("data/sampling_hz", 30.0);
-    pd.estimation_hz = dp("data/estimation_hz", 10.0);
-    pd.sampling_duration = dp("data/sampling_duration", 10.0);
-    pd.validation_ratio = dp("data/validation_ratio", 0.2);
+    pd.sampling_hz = declare_parameter<double>("data.sampling_hz");
+    pd.estimation_hz = declare_parameter<double>("data.estimation_hz");
+    pd.sampling_duration = declare_parameter<double>("data.sampling_duration");
+    pd.validation_duration =
+        declare_parameter<double>("data.validation_duration");
+    pd.sampling_data_size = pd.sampling_duration * pd.sampling_hz;
+    pd.validation_data_size = pd.validation_duration * pd.sampling_hz;
   }
 
   // fitler
   auto &pf = params_.filter;
   {
-    pf.use_lowpass_filter = dp("filter/use_lowpass_filter", true);
-    pf.cutoff_hz_in = dp("filter/cutoff_hz_input", 0.5);
-    pf.cutoff_hz_out = dp("filter/cutoff_hz_output", 0.1);
+    pf.use_lowpass_filter =
+        declare_parameter<bool>("filter.use_lowpass_filter");
+    pf.cutoff_hz_in = declare_parameter<double>("filter.cutoff_hz_input");
+    pf.cutoff_hz_out = declare_parameter<double>("filter.cutoff_hz_output");
   }
 
   // debug info
   auto &pde = params_.debug;
   {
-    pde.is_showing_debug_info = dp("is_showing_debug_info", true);
-    pde.name = dp("name", "delay_time");
+    pde.is_showing_debug_info =
+        declare_parameter<bool>("debug.is_showing_debug_info");
+    pde.name = declare_parameter<std::string>("node_name");
     debugger_ = std::make_unique<Debugger>(this, pde.name);
   }
 
@@ -134,22 +140,17 @@ DelayEstimatorNode::DelayEstimatorNode(const rclcpp::NodeOptions &node_options)
 
   // estimation callback
   {
-    const auto period_s = 1.0 / params_.data.estimation_hz;
-    auto estimation_callback =
-        std::bind(&DelayEstimatorNode::estimateDelay, this);
-    const auto period_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(
-        std::chrono::duration<double>(period_s));
-    timer_ =
-        std::make_shared<rclcpp::GenericTimer<decltype(estimation_callback)>>(
-            this->get_clock(), period_ns, std::move(estimation_callback),
-            this->get_node_base_interface()->get_context());
-    this->get_node_timers_interface()->add_timer(timer_, nullptr);
+    const auto period_ns = rclcpp::Rate(params_.data.estimation_hz).period();
+    timer_ = rclcpp::create_timer(
+        this, get_clock(), period_ns,
+        std::bind(&DelayEstimatorNode::estimateDelay, this));
   }
 }
 
 void DelayEstimatorNode::estimateDelay() {
   if (!input_value_ || !response_value_)
     return;
+  delay_estimator_ = std::make_unique<DelayEstimator>();
   delay_estimator_->estimate(params_, input_value_, response_value_, debugger_);
 }
 

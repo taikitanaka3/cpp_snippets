@@ -37,8 +37,8 @@ TEST(test, process_data) {
   Data input_data;
   Data response_data;
   Params params;
-  params.data.validation_data = 4;
-  params.data.total_data = 6;
+  params.data.validation_data_size = 4;
+  params.data.sampling_data_size = 6;
   params.thresh.validation_data_stddev = 0.2;
   for (size_t i = 0; i < in.size(); i++) {
     const UpdateResult update =

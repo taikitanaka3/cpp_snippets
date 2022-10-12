@@ -10,8 +10,8 @@ PKG=boost_reference
 PKG=interpolation
 #PKG=window_recorder
 #PKG=rviz_marker
-#PKG=delay_estimator
-PKG=interp
+PKG=delay_estimator
+#PKG=interp
 
 #PKG=path_smoother
 case $1 in

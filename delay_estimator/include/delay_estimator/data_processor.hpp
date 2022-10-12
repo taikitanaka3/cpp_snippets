@@ -24,12 +24,12 @@ struct Params {
     double valid_delay_index_ratio; // [-]
   };
   struct DataSize {
-    size_t total_data;
-    size_t validation_data;
+    size_t sampling_data_size;
+    size_t validation_data_size;
     double sampling_duration; // [s]
     double sampling_hz;
     double estimation_hz;
-    double validation_ratio; // [s]
+    double validation_duration; // [s]
   };
   struct Filter {
     double cutoff_hz_in;
@@ -168,8 +168,7 @@ struct Statistic {
 
 inline UpdateResult updateData(const Params &params, const double input,
                                const double response, Data &input_data_list,
-                               Data &response_data_list) {
-  double max_stddev = 0;
+                               Data &response_data_list, double &max_stddev) {
   bool is_valid_stddev = false;
   bool is_valid_input = false;
   bool is_valid_response = false;
@@ -178,9 +177,9 @@ inline UpdateResult updateData(const Params &params, const double input,
     const auto &pt = params.thresh;
     // is valid data
     is_valid_input =
-        (pt.valid_min_value <= input && input <= pt.valid_min_value);
+        (pt.valid_min_value <= input && input <= pt.valid_max_value);
     is_valid_response =
-        (pt.valid_min_value <= response && response <= pt.valid_min_value);
+        (pt.valid_min_value <= response && response <= pt.valid_max_value);
 
     // is valid stddev
     input_data_list.validation.emplace_back(input);
@@ -188,9 +187,11 @@ inline UpdateResult updateData(const Params &params, const double input,
     const double input_stddev = getStddevFromVector(input_data_list.validation);
     const double response_stddev =
         getStddevFromVector(response_data_list.validation);
+
     max_stddev = std::max(input_stddev, response_stddev);
+    std::cerr << "stddev" << max_stddev << std::endl;
     is_valid_stddev = (max_stddev > params.thresh.validation_data_stddev);
-    if (input_data_list.validation.size() >= params.data.validation_data) {
+    if (input_data_list.validation.size() >= params.data.validation_data_size) {
       input_data_list.validation.pop_front();
       response_data_list.validation.pop_front();
     }
@@ -201,7 +202,7 @@ inline UpdateResult updateData(const Params &params, const double input,
   } else {
     input_data_list.data.emplace_back(input);
     response_data_list.data.emplace_back(response);
-    if (input_data_list.data.size() < params.data.total_data) {
+    if (input_data_list.data.size() < params.data.sampling_data_size) {
       // adding data
       return UpdateResult::INIT;
     } else {
