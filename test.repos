@@ -3,7 +3,7 @@ repositories:
   multidata_monitor:
     type: git
     url: git@github.com:tier4/multi_data_monitor.git
-    version: main
+    version: develop
   autoware_auto_msgs:
     type: git
     url: git@github.com:tier4/autoware_auto_msgs.git

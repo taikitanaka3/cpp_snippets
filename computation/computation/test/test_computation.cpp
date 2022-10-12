@@ -6,37 +6,38 @@ using namespace std::chrono;
 
 using namespace std;
 
-template<typename T>
-ostream& operator << (ostream& os, vector<T>& vec) {
-	os << "{";
-	for (int i = 0; i<vec.size(); i++) {
-		os << vec[i] << (i + 1 == vec.size() ? "" : ", ");
-	}
-	os << "}";
-	return os;
+template <typename T> ostream &operator<<(ostream &os, vector<T> &vec) {
+  os << "{";
+  for (int i = 0; i < vec.size(); i++) {
+    os << vec[i] << (i + 1 == vec.size() ? "" : ", ");
+  }
+  os << "}";
+  return os;
 }
 
 TEST(std__unique, with_erase) {
   // old
   {
-    vector<vector<int>> lane_idss = {{1,2},{2,3},{3,4}};
+    vector<vector<int>> lane_idss = {{1, 2}, {2, 3}, {3, 4}};
     std::vector<int> unique_lane_ids;
-    for(auto lane_ids: lane_idss){
+    for (auto lane_ids : lane_idss) {
       unique_lane_ids.emplace_back(lane_ids.front());
     }
-    std::vector<int> lane_ids = {1,2,2,3,3,4,4};
-    std::cerr << "all ids" <<lane_ids<< std::endl;
+    std::vector<int> lane_ids = {1, 2, 2, 3, 3, 4, 4};
+    std::cerr << "all ids" << lane_ids << std::endl;
     /* remove adjacent duplicates */
-    lane_ids.erase(std::unique(lane_ids.begin(), lane_ids.end()), lane_ids.end());
-    std::cerr << "ids" <<lane_ids<< std::endl;
+    lane_ids.erase(std::unique(lane_ids.begin(), lane_ids.end()),
+                   lane_ids.end());
+    std::cerr << "ids" << lane_ids << std::endl;
   }
   // new
   {
-    std::vector<int> lane_ids = {1,2,2,3,3,4,4};
-    std::cerr << "all ids" <<lane_ids<< std::endl;
+    std::vector<int> lane_ids = {1, 2, 2, 3, 3, 4, 4};
+    std::cerr << "all ids" << lane_ids << std::endl;
     /* remove adjacent duplicates */
-    lane_ids.erase(std::unique(lane_ids.begin(), lane_ids.end()), lane_ids.end());
-    std::cerr << "ids" <<lane_ids<< std::endl;
+    lane_ids.erase(std::unique(lane_ids.begin(), lane_ids.end()),
+                   lane_ids.end());
+    std::cerr << "ids" << lane_ids << std::endl;
   }
 }
 
