@@ -25,3 +25,7 @@ repositories:
     type: git
     url: https://github.com/tier4/tier4_autoware_msgs.git
     version: tier4/universe
+  vendor/grid_map:
+    type: git
+    url: https://github.com/tier4/grid_map.git
+    version: 657cc055eb90a042057738a85a5651c03e42b1bb
