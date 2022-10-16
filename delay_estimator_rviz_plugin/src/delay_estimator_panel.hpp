@@ -50,35 +50,34 @@ class QLineEdit;
 using InputSubscriberType = std_msgs::msg::Header;
 using ResponseSubscriberType = std_msgs::msg::Header;
 
-class DelayEstimatorPanel : public rviz_common::Panel
-{
+class DelayEstimatorPanel : public rviz_common::Panel {
   Q_OBJECT
 
 public:
-  explicit DelayEstimatorPanel(QWidget * parent = nullptr);
+  explicit DelayEstimatorPanel(QWidget *parent = nullptr);
   ~DelayEstimatorPanel() override;
   void update();
   void onInitialize() override;
   void createWallTimer();
   void onTimer();
   void save(rviz_common::Config config) const override;
-  void load(const rviz_common::Config & config) override;
-  void onInputTopic(InputSubscriberType::ConstSharedPtr msg){
-    input_ = std::make_shared<InputSubscriberType>(*msg);}
-  void onResponseTopic(ResponseSubscriberType::ConstSharedPtr msg){
+  void load(const rviz_common::Config &config) override;
+  void onResponseTopic(ResponseSubscriberType::ConstSharedPtr msg) {
     response_ = std::make_shared<ResponseSubscriberType>(*msg);
   }
 
 public Q_SLOTS:
-  void onClickEstimation();
+  void onClickStart();
+  void onClickStop();
   void onClickResetData();
   void onDurationChanged();
 
 private:
-  QPushButton * estimate_delay_button_ptr_;
-  QPushButton * reset_button_ptr_;
-  QSpinBox * duration_;
-  QTimer * timer_;
+  QPushButton *start_button_ptr_;
+  QPushButton *stop_button_ptr_;
+  QPushButton *reset_button_ptr_;
+  QSpinBox *duration_;
+  QTimer *timer_;
   std::shared_ptr<InputSubscriberType> input_;
   std::shared_ptr<ResponseSubscriberType> response_;
 
@@ -88,4 +87,4 @@ protected:
   rclcpp::Node::SharedPtr raw_node_;
 };
 
-#endif  // DELAY_ESTIMATOR_PANEL_HPP_
+#endif // DELAY_ESTIMATOR_PANEL_HPP_
