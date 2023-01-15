@@ -1,0 +1,7 @@
+<library path="test_panel">
+  <class name="test_panel"
+         type="TestPanel"
+         base_class_type="rviz_common::Panel">
+         <description>test_panel</description>
+  </class>
+</library>

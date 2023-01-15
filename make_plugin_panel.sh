@@ -47,7 +47,8 @@ public:
   void onInitialize() override;
 
 private:
-  QLineEdit * test_label_;
+  QLineEdit * test_label_= {nullptr};
+  QPushButton * test_button_ = {nullptr};
   rclcpp::Publisher<String>::SharedPtr pub_test_;
 
 protected:
@@ -64,11 +65,16 @@ template_cpp=$(
 
 TestPanel::TestPanel(QWidget * parent) : rviz_common::Panel(parent)
 {
-  test_label_ = new QLineEdit;
-  test_label_->setReadOnly(true);
+  test_label_ = new QLineEdit("test text");
+  test_button_ = new QPushButton("test button");
+  connect(
+        test_button_, &QPushButton::clicked, this,
+        []{std::cerr<<"button pressed: "<<__FILE__<<" at: "<<__LINE__<<std::endl;}
+  );
 
   auto * layout = new QHBoxLayout(this);
   layout->addWidget(new QLabel("test:"));
+  layout->addWidget(test_button_);
   layout->addWidget(test_label_);
   setLayout(layout);
 
@@ -85,7 +91,7 @@ void TestPanel::onInitialize()
 
 void TestPanel::update()
 {
-  std::cerr<<"file: "<<__FILE__<<"line: "<<__LINE__<<std::endl;
+  RCLCPP_INFO_THROTTLE(rviz_ros_node_->get_logger(), *rviz_ros_node_->get_clock(), 5000, "--update--");
   auto message = String();
   message.data="test pub";
   pub_test_->publish(message);
