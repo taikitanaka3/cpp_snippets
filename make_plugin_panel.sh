@@ -31,11 +31,12 @@ template_hpp=$(
 #include <rviz_common/display_context.hpp>
 #include <rviz_common/panel.hpp>
 #include <rviz_common/ros_integration/ros_node_abstraction_iface.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
 #endif
 
-
 class QLineEdit;
-
+using std_msgs::msg::String;
 class TestPanel : public rviz_common::Panel
 {
   Q_OBJECT
@@ -47,9 +48,10 @@ public:
 
 private:
   QLineEdit * test_label_;
+  rclcpp::Publisher<String>::SharedPtr pub_test_;
 
 protected:
-  rviz_common::ros_integration::RosNodeAbstractionIface::WeakPtr rviz_ros_node_;
+  rclcpp::Node::SharedPtr rviz_ros_node_;
 };
 
 EOS
@@ -59,9 +61,6 @@ EOS
 template_cpp=$(
     cat <<EOS
 #include <$package_name/$package_name.hpp>
-
-#include <rclcpp/rclcpp.hpp>
-#include <bits/stdc++.h>
 
 TestPanel::TestPanel(QWidget * parent) : rviz_common::Panel(parent)
 {
@@ -80,12 +79,16 @@ TestPanel::TestPanel(QWidget * parent) : rviz_common::Panel(parent)
 
 void TestPanel::onInitialize()
 {
-  rviz_ros_node_ = getDisplayContext()->getRosNodeAbstraction();
+  rviz_ros_node_ = this->getDisplayContext()->getRosNodeAbstraction().lock()->get_raw_node();
+  pub_test_ = rviz_ros_node_->create_publisher<String>("test", 1);
 }
 
 void TestPanel::update()
 {
   std::cerr<<"file: "<<__FILE__<<"line: "<<__LINE__<<std::endl;
+  auto message = String();
+  message.data="test pub";
+  pub_test_->publish(message);
 }
 
 #include <pluginlib/class_list_macros.hpp>
@@ -134,6 +137,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 ament_auto_add_library($package_name SHARED
   src/$package_name/$package_name.cpp
+  include/$package_name/$package_name.hpp
 )
 
 # Test
@@ -188,15 +192,13 @@ EOS
 )
 
 template_description=$(
-      cat <<EOS
-  <library path="$package_name">
-
-  <class
-    type="$package_name"
-    base_class_type="rviz_common::Panel">
-    <description>test_panel</description>
+    cat <<EOS
+<library path="$package_name">
+  <class name="$package_name"
+         type="TestPanel"
+         base_class_type="rviz_common::Panel">
+         <description>$package_name</description>
   </class>
-
 </library>
 EOS
 )
