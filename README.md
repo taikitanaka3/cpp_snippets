@@ -6,9 +6,13 @@ set up repos with `vcs import --force external<test.repos`
 
 ## Make ros package
 
+![](test_panel/test_panel/image/test_script.png)
+
 make ros pkg with `make_ros_pkg.sh "pkg_name"`
 
 ## Make plugin panel
+
+![](test_panel/test_panel/image/test_panel.png)
 
 make ros pkg with `make_plugin_panel.sh "pkg_name"`
 
