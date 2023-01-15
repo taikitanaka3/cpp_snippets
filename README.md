@@ -8,36 +8,41 @@ set up repos with `vcs import --force external<test.repos`
 
 make ros pkg with `make_ros_pkg.sh "pkg_name"`
 
+## Make plugin panel
+
+make ros pkg with `make_plugin_panel.sh "pkg_name"`
+
 ## Test autoware pkg
 
 - test
 
-`./dev.sh test`
+`./dev.sh t $package_name`
 
-- build
+- build selected package
 
-`./dev.sh`
+`./dev.sh b $package_name`
+
+- build packages up to
+
+`./dev.sh p $package_name`
 
 ```.bash
 #!/bin/bash
-PKG=interp
-
-#PKG=path_smoother
 case $1 in
-test)
-    colcon test --packages-select "$PKG" --event-handlers console_direct+
+t)
+    colcon test --packages-select "$2" --event-handlers console_direct+
     ;;
-build_all)
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --continue-on-error
+d)
+    sudo rm -r install/"$2" build/"$2"
     ;;
-delete)
-    sudo rm -r install/"$PKG" build/"$PKG"
+b)
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --packages-select "$2"
     ;;
-debug)
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON --symlink-install --packages-select "$PKG"
+p)
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --packages-up-to "$2"
     ;;
 *)
-    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install --packages-select "$PKG"
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache --symlink-install
     ;;
 esac
 ```
