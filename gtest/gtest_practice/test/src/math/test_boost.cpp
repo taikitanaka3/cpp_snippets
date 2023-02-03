@@ -69,3 +69,11 @@ TEST(boost_test, boost_test2) {
     }
   }
 }
+
+TEST(test_count, test_count) {
+  std::vector<int> v;
+  size_t n_count = std::count(v.begin(), v.end(), 1);
+  bool enable = (n_count != 0);
+  std::cout << n_count << std::endl;
+  std::cout << enable << std::endl;
+}
